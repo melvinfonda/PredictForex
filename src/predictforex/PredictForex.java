@@ -16,29 +16,21 @@ import java.util.Vector;
  */
 public class PredictForex {
     private static String[][] forexPairData;
-    
-    public void MACDAnalysis (String[][] forexPrice){
-            
-            
-     }
+   
     /**
      * @param args the command line arguments
      * @throws java.io.FileNotFoundException
      */
     public static void main(String[] args) throws FileNotFoundException {
-        Vector<Double> MACDLine = new Vector<>(); 
-        Vector<Double> SignalLine = new Vector<>(); 
-        Vector<Double> Histogram = new Vector<>(); 
-        
-        
-        
         /*TES BACA CSV*/
         ForexFileReader tes = new ForexFileReader();
         forexPairData = tes.forexPrice("tes.csv");
-        tes.printMatrix(forexPairData);
+        //tes.printMatrix(forexPairData);
+        
     
         /*TES MACD*/
-//        MACD tesMACD = new MACD();
+        MACD tesMACD = new MACD();
+        tesMACD.MACDAnalysis(forexPairData);
 //        System.out.println("tes: " + tesMACD.SMA(222.3, 10));
 //        System.out.println("tes: " + tesMACD.Multiplier(10));
 //        System.out.println("tes: " + tesMACD.EMA(22.61, 22.27 , 10));

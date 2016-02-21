@@ -15,10 +15,10 @@ import java.io.*;
 public class ForexFileReader {
     private int j;
     private int i;
-    private final int row =30000;
-    private final int column =7;
+    public static final int row =30000;
+    public static final int column =7;
         
-        
+    //turn csv file to raw data    
     public String[][] forexPrice(String csvFile) {
         String[][] rawForexData = new String[row][column];
         String[][] forexData = new String[row][column];
@@ -72,16 +72,29 @@ public class ForexFileReader {
         return forexData;
     }
         
-    public void printMatrix(String[][] matrix)
+    public static void printMatrix(String[][] matrix)
     {
-        System.out.println("tescacat : " + matrix[1][1]);
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < column; j++) {
-                if(matrix[i][j]!=null)
-                    System.out.print(matrix[i][j] + " ");
+        for (int x = 0; x < matrix.length; x++) {
+            for (int y = 0; y < 3; y++) {
+                if(matrix[x][y]!=null)
+                    System.out.print("matriks ke-" +x+y+ "= " +matrix[x][y] + " ");
             }
-            if(matrix[i][j]!=null)
+            if(matrix[x][0]!=null)
                 System.out.print("\n");
         }
+    }
+    
+    //to take close price from the raw matrix data and turn the type from string to double
+    public static double[] stringToDoubleClose (String[][] rawForexPrice)
+    {
+       double[] close = new double[row];
+ 
+       for (int x = 0; x < row; x++) {
+           //close price located on column 4
+            if(rawForexPrice[x][5]!=null){
+                close[x] = Double.parseDouble(rawForexPrice[x][5]);
+            }
+        }
+       return close;
     }
 }
