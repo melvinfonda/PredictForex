@@ -31,10 +31,14 @@ public class ForexFileReader {
         //read from csv file then put in to matrix
         try {
                 br = new BufferedReader(new FileReader(csvFile));
-                while ((line = br.readLine()) != null && i<30000) {
+                
+                while (((line = br.readLine()) != null) && (!",,,,,,".equals(line))) {
                     // use comma as separator
                     String[] value = line.split(cvsSplitBy);
-                    System.arraycopy(value, 0, rawForexData[i], 0, 7);
+                    for (int y=0;y<7;y++)
+                    {
+                        rawForexData[i][y] = value[y];
+                    }
                     i++;
                 }
         } 
