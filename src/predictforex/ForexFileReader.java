@@ -94,7 +94,7 @@ public class ForexFileReader {
        double[] close = new double[row];
  
        for (int x = 0; x < row; x++) {
-           //close price located on column 4
+           //close price located on column 5
             if(rawForexPrice[x][5]!=null){
                 close[x] = Double.parseDouble(rawForexPrice[x][5]);
             }

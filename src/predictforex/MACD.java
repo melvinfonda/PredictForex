@@ -57,13 +57,11 @@ public class MACD {
              double totalPrice26;
             //calculate SMA for period 9
             totalPrice9= 0;
-            System.out.println("raw :" + rawForexPrice[0][5] );
             for (int i=0 ; i<9 ; i++)
             { 
                 totalPrice9 += Double.parseDouble(rawForexPrice[i][5]);
             }
             SMA9 =  String.valueOf(SMA(totalPrice9,9));
-             
              //ForexFileReader.printMatrix(SMA9);
              
              //calculate SMA for period 12
@@ -86,64 +84,69 @@ public class MACD {
              //ForexFileReader.printMatrix(SMA26);
             
              //calculate EMA for period 12
-             EMA12[0][0] = rawForexPrice [0][0];
-             EMA12[0][1] = rawForexPrice [0][1];
-             System.out.println("sma :" + SMA12);
-             EMA12[0][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[0][5]),Double.parseDouble(SMA12),12));
-             for (int i=1 ; rawForexPrice[i+12][0]!=null ; i++)
+             EMA12[0][0] = rawForexPrice [11][0];
+             EMA12[0][1] = rawForexPrice [11][1];
+             EMA12[0][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[11][5]),Double.parseDouble(SMA12),12));
+             int j=1;
+             for (int i=12 ; rawForexPrice[i][0]!=null ; i++)
              {
                     //copy date
-                    EMA12[i][0] = rawForexPrice [i][0]; 
+                    EMA12[j][0] = rawForexPrice [i][0]; 
                     //copy time
-                    EMA12[i][1] = rawForexPrice [i][1]; 
+                    EMA12[j][1] = rawForexPrice [i][1]; 
                     //calculate EMA12
-                    EMA12[i][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[i][5]),Double.parseDouble(EMA12[i-1][2]),12));
-             }
+                    EMA12[j][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[i][5]),Double.parseDouble(EMA12[j-1][2]),12));
+                    j++;
+            }
              
             //ForexFileReader.printMatrix(EMA12);
              
              //calculate EMA for period 26
-             EMA26[0][0] = rawForexPrice [0][0];
-             EMA26[0][1] = rawForexPrice [0][1];
-             EMA26[0][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[0][5]),Double.parseDouble(SMA26),26));
-             for (int i=1 ; rawForexPrice[i+26][0]!=null ; i++)
+             EMA26[0][0] = rawForexPrice [25][0];
+             EMA26[0][1] = rawForexPrice [25][1];
+             EMA26[0][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[25][5]),Double.parseDouble(SMA26),26));
+             j=1;
+             for (int i=26 ; rawForexPrice[i][0]!=null ; i++)
              {
                     //copy date
-                    EMA26[i][0] = rawForexPrice [i][0]; 
+                    EMA26[j][0] = rawForexPrice [i][0]; 
                     //copy time
-                    EMA26[i][1] = rawForexPrice [i][1]; 
-                    //calculate EMA9
-                    EMA26[i][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[i][5]),Double.parseDouble(EMA26[i-1][2]),26));
+                    EMA26[j][1] = rawForexPrice [i][1]; 
+                    //calculate EMA12
+                    EMA26[j][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[i][5]),Double.parseDouble(EMA26[j-1][2]),26));
+                    j++;
              }
             //ForexFileReader.printMatrix(EMA26);
              
              //calculate Signal Line
-             SignalLine[0][0] = rawForexPrice [0][0];
-             SignalLine[0][1] = rawForexPrice [0][1];
-             SignalLine[0][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[0][5]),Double.parseDouble(SMA9),9));
-             for (int i=1 ; rawForexPrice[i+9][0]!=null ; i++)
+             SignalLine[0][0] = rawForexPrice [8][0];
+             SignalLine[0][1] = rawForexPrice [8][1];
+             SignalLine[0][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[8][5]),Double.parseDouble(SMA9),9));
+             j=1;
+             for (int i=9 ; rawForexPrice[i][0]!=null ; i++)
              {
                     //copy date
-                    SignalLine[i][0] = rawForexPrice [i][0]; 
+                    SignalLine[j][0] = rawForexPrice [i][0]; 
                     //copy time
-                    SignalLine[i][1] = rawForexPrice [i][1]; 
+                    SignalLine[j][1] = rawForexPrice [i][1]; 
                     //calculate EMA9
-                    SignalLine[i][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[i][5]),Double.parseDouble(SignalLine[i-1][2]),9));
+                    SignalLine[j][2] = String.valueOf(EMA(Double.parseDouble(rawForexPrice[i][5]),Double.parseDouble(SignalLine[j-1][2]),9));
+                    j++;
              }
              
              //ForexFileReader.printMatrix(SignalLine);
              
              //calculate MACDLine
-             for (int i=0 ; rawForexPrice[i+26][0]!=null ; i++)
+             for (int i=0 ; EMA26[i][0]!=null ; i++)
              {
                     //copy date
-                    MACDLine[i][0] = rawForexPrice [i][0]; 
+                    MACDLine[i][0] = EMA26 [i][0]; 
                     //copy time
-                    MACDLine[i][1] = rawForexPrice [i][1]; 
+                    MACDLine[i][1] = EMA26 [i][1]; 
                     //calculate SMA9
-                    MACDLine[i][2] = String.valueOf(MACDPoint(Double.parseDouble(EMA12[i][2]),Double.parseDouble(EMA26[i][2])));
+                    MACDLine[i][2] = String.valueOf(MACDPoint(Double.parseDouble(EMA12[i+14][2]),Double.parseDouble(EMA26[i][2])));
              }
-             //ForexFileReader.printMatrix(MACDLine);
+             ForexFileReader.printMatrix(MACDLine);
      }
     
     

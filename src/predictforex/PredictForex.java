@@ -24,13 +24,13 @@ public class PredictForex {
     public static void main(String[] args) throws FileNotFoundException {
         /*TES BACA CSV*/
         ForexFileReader tes = new ForexFileReader();
-        forexPairData = tes.forexPrice("tes2.csv");
-        tes.printMatrix(forexPairData);
+        forexPairData = tes.forexPrice("tes.csv");
+        //tes.printMatrix(forexPairData);
         
     
         /*TES MACD*/
         MACD tesMACD = new MACD();
-        //tesMACD.MACDAnalysis(forexPairData);      
+        tesMACD.MACDAnalysis(forexPairData);      
      } 
     
 }
