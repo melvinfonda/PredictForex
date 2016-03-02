@@ -7,8 +7,6 @@
 package predictforex;
 
 import java.io.FileNotFoundException;
-import java.util.Enumeration;
-import java.util.Vector;
 
 /**
  *
