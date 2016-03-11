@@ -33,9 +33,12 @@ public class PredictForex {
         MACD tesMACD = new MACD();
         tesMACD.MACDAnalysis(forexPairData);   
         
-        /*TES ANN */
-//        ANN.rawForexPriceToArff(forexPairData);
-//        
+        /*TES ForexFileWriter */
+        ForexFileWriter tesANN = new ForexFileWriter();
+        tesANN.normalizedForexPriceToArff(forexPairData);
+        tesANN.rawForexPriceToArff(forexPairData);
+     //   ForexFileWriter.rawForexPriceToArff(forexPairData);
+        
 //        /*WEKA*/
 //        WEKA weka = new WEKA();
 //        // membaca dataset awal

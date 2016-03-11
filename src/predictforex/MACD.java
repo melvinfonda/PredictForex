@@ -47,64 +47,7 @@ public class MACD {
          return EMA9;
     }
     
-    public static void matrixToCSV(String[][] MACDPrice) throws IOException
-    {
-        FileWriter fw = new FileWriter("MACDPrice.csv");
-        PrintWriter pw = new PrintWriter(fw);
-        
-        for(int i=0;MACDPrice[i][0]!=null;i++){
-            for(int j=0;j<MACDPrice[0].length;j++){ 
-                pw.print(MACDPrice[i][j]);
-                if(j!=MACDPrice[0].length-1)
-                    pw.print(",");
-            }
-            pw.println("");
-        }        
-        
-        //Flush the output to the file
-        pw.flush();
-
-        //Close the Print Writer
-        pw.close();
-
-        //Close the File Writer
-        fw.close();
-    }
     
-    public static void MACDToArff (String[][] MACDPrice) throws IOException{
-        FileWriter fw = new FileWriter("MACDPrice.arff");
-        PrintWriter pw = new PrintWriter(fw);
-        int counter=0;
-        
-        pw.println("@RELATION forexPrice");
-        pw.println("");
-        pw.println("@ATTRIBUTE open real");
-        pw.println("@ATTRIBUTE high real");
-        pw.println("@ATTRIBUTE low real");
-        pw.println("@ATTRIBUTE close real");
-        pw.println("@ATTRIBUTE close2 real");
-        pw.println("@data");
-        
-        //count for row to divide between training set and test set
-        for(int i=1;MACDPrice[i][0]!=null;i++){
-            counter++;
-        }
-        
-        //write price to ARFF
-        for(int i=1;(i<=counter*0.8);i++)
-        {
-                pw.println(MACDPrice[i-1][2]+","+MACDPrice[i-1][3]+","+MACDPrice[i-1][4]+","+MACDPrice[i-1][5]+","+MACDPrice[i][5]);
-        }
-        
-        //Flush the output to the file
-        pw.flush();
-
-        //Close the Print Writer
-        pw.close();
-
-        //Close the File Writer
-        fw.close();
-    }
     
     public void MACDAnalysis (String[][] rawForexPrice) throws IOException{
             //for storing SMA value
@@ -226,39 +169,38 @@ public class MACD {
                     Histogram[i][2] = String.valueOf(Double.parseDouble(MACDLine[j][2]) - Double.parseDouble(SignalLine[i][2]));
                     j++;
              }
-             ForexFileReader.printMatrix(Histogram);
+             //ForexFileReader.printMatrix(Histogram);
 //             matrixToCSV(Histogram);
              
             //give recommendation from intersection between signal and macd line
              j=0;
              for (int i=1 ; Histogram[i][0]!=null ; i++)
              {
+                //copy date
+                Recommendation[j][0] = Histogram[i][0]; 
+                //copy time
+                Recommendation[j][1] = Histogram[i][1]; 
+                Recommendation[j][2] = Histogram[i][2];
+                
                 //calculate point where to sell or buy using histogram
                 if(Double.parseDouble(Histogram[i-1][2])>0){
+                    Recommendation[j][3] = "stall";
                     if(Double.parseDouble(Histogram[i][2])<0){
-                        //copy date
-                        Recommendation[j][0] = Histogram[i][0]; 
-                        //copy time
-                        Recommendation[j][1] = Histogram[i][1]; 
-                        Recommendation[j][2] = Histogram[i][2];
                         Recommendation[j][3] = "sell";
-                        j++;
                     }
                 }
                 else if(Double.parseDouble(Histogram[i-1][2])<0){
+                    Recommendation[j][3] = "stall";
                     if(Double.parseDouble(Histogram[i][2])>0){
-                        //copy date
-                        Recommendation[j][0] = Histogram[i][0]; 
-                        //copy time
-                        Recommendation[j][1] = Histogram[i][1]; 
-                        Recommendation[j][2] = Histogram[i][2];
                         Recommendation[j][3] = "buy";
-                        j++;
                     }
                 }
+                j++;
              }
              ForexFileReader.printMatrix(Recommendation);
-             matrixToCSV(Recommendation);
+             ForexFileWriter.MACDPriceToCSV(Recommendation);
+             ForexFileWriter.MACDToArff(Recommendation);
+             ForexFileWriter.NormalizedMACDToArff(Recommendation);
      }
     
     
