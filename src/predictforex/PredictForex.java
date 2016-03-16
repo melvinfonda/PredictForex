@@ -25,7 +25,7 @@ public class PredictForex {
     public static void main(String[] args) throws FileNotFoundException, IOException, Exception {
         /*TES BACA CSV*/
         ForexFileReader tes = new ForexFileReader();
-        forexPairData = tes.forexPrice("tes3.csv");
+        forexPairData = tes.forexPrice("tes4.csv");
         //tes.printRawData(forexPairData);
         
     
