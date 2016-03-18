@@ -5,14 +5,7 @@
 @ATTRIBUTE low real
 @ATTRIBUTE close real
 @ATTRIBUTE close2 real
-@data
-@RELATION unlabeledForexPrice
 
-@ATTRIBUTE open real
-@ATTRIBUTE high real
-@ATTRIBUTE low real
-@ATTRIBUTE close real
-@ATTRIBUTE close2 real
 @data
 0.993790,0.993910,0.993630,0.993630,0.993380
 0.993240,0.993380,0.993190,0.993380,0.993650

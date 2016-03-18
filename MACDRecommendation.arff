@@ -3,6 +3,7 @@
 @ATTRIBUTE histogram1 real
 @ATTRIBUTE histogram2 real
 @ATTRIBUTE recommendation {buy,sell,stall}
+
 @data
 -1.2589913011548225E-4,-3.005309910575982E-4,stall
 -3.005309910575982E-4,-3.2658990378924913E-4,stall

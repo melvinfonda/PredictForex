@@ -15,6 +15,12 @@ import java.io.PrintWriter;
  * @author Melvin
  */
 public class ForexFileWriter {
+        String []openMinMax;
+        String []highMinMax;
+        String []lowMinMax;
+        String []closeMinMax;
+        String []volumeMinMax;
+    
     
     public static String [] findMinMax (String[][] ForexPrice, int column)
     {
@@ -44,14 +50,9 @@ public class ForexFileWriter {
         return String.valueOf(normalizedPrice);
     }
     
-    public static String[][] rawForexPriceNormalization (String[][] ForexPrice)
+    public static String[][] rawForexPriceNormalization (String[][] ForexPrice,String[]openMinMax,String[]highMinMax,String[]lowMinMax,String[]closeMinMax,String[]volumeMinMax)
     {
         String [][]normalizedForexPrice = new String [ForexPrice.length][ForexPrice[0].length];
-        String []openMinMax = findMinMax(ForexPrice, 2);
-        String []highMinMax = findMinMax(ForexPrice, 3);
-        String []lowMinMax = findMinMax(ForexPrice, 4);
-        String []closeMinMax = findMinMax(ForexPrice, 5);
-        String []volumeMinMax = findMinMax(ForexPrice, 6);
         
         for(int i=0;ForexPrice[i][0]!=null;i++){
                 normalizedForexPrice[i][0] = ForexPrice [i][0];
@@ -66,16 +67,15 @@ public class ForexFileWriter {
         return normalizedForexPrice;
     }
     
-    public static String[][] MACDPriceNormalization (String[][] MACDPrice)
+    public static String[][] MACDPriceNormalization (String[][] MACDPrice,String [] MACDMinMax)
     {
         String [][]normalizedMACDPrice = new String [MACDPrice.length][MACDPrice[0].length];
-        String []MACDMinMax = findMinMax(MACDPrice, 2);
         
         for(int i=0;MACDPrice[i][0]!=null;i++){
                 normalizedMACDPrice[i][0] = MACDPrice [i][0];
                 normalizedMACDPrice[i][1] = MACDPrice [i][1];
                 normalizedMACDPrice[i][2] = FeatureScaling(MACDPrice [i][2], MACDMinMax);
-                normalizedMACDPrice[i][1] = MACDPrice [i][3];
+                normalizedMACDPrice[i][3] = MACDPrice [i][3];
         }
         
         return normalizedMACDPrice;
@@ -85,7 +85,7 @@ public class ForexFileWriter {
     public static void rawForexPriceToArff (String[][] ForexPrice) throws IOException{
         FileWriter fw = new FileWriter("forexPrice.arff");
         PrintWriter pw = new PrintWriter(fw);
-        FileWriter fw2 = new FileWriter("unlabeledForexPrice.arff");
+        FileWriter fw2 = new FileWriter("ForexPriceTestSet.arff");
         PrintWriter pw2 = new PrintWriter(fw2);
         int counter=0;
         
@@ -96,16 +96,18 @@ public class ForexFileWriter {
         pw.println("@ATTRIBUTE low real");
         pw.println("@ATTRIBUTE close real");
         pw.println("@ATTRIBUTE close2 real");
+        pw.println("");
         pw.println("@data");
         
-        pw.println("@RELATION unlabeledForexPrice");
-        pw.println("");
-        pw.println("@ATTRIBUTE open real");
-        pw.println("@ATTRIBUTE high real");
-        pw.println("@ATTRIBUTE low real");
-        pw.println("@ATTRIBUTE close real");
-        pw.println("@ATTRIBUTE close2 real");
-        pw.println("@data");
+        pw2.println("@RELATION forexPriceTestSet");
+        pw2.println("");
+        pw2.println("@ATTRIBUTE open real");
+        pw2.println("@ATTRIBUTE high real");
+        pw2.println("@ATTRIBUTE low real");
+        pw2.println("@ATTRIBUTE close real");
+        pw2.println("@ATTRIBUTE close2 real");
+        pw2.println("");
+        pw2.println("@data");
         
         //count for row to divide between training set and test set
         for(int i=0;ForexPrice[i][0]!=null;i++){
@@ -120,7 +122,7 @@ public class ForexFileWriter {
         
         for(int j=(int) Math.ceil(counter*0.8);ForexPrice[j][0]!=null;j++)
         {
-            pw2.println(ForexPrice[j-1][2]+","+ForexPrice[j-1][3]+","+ForexPrice[j-1][4]+","+ForexPrice[j-1][5]+",?");
+            pw2.println(ForexPrice[j-1][2]+","+ForexPrice[j-1][3]+","+ForexPrice[j-1][4]+","+ForexPrice[j-1][5]+","+ForexPrice[j][5]);
         }
         
         //Flush the output to the file
@@ -140,14 +142,14 @@ public class ForexFileWriter {
     public static void normalizedForexPriceToArff (String[][] ForexPrice) throws IOException{
         FileWriter fw = new FileWriter("normalizedForexPrice.arff");
         PrintWriter pw = new PrintWriter(fw);
-        FileWriter fw2 = new FileWriter("unlabeledNormalizedForexPrice.arff");
+        FileWriter fw2 = new FileWriter("normalizedForexPriceTestSet.arff");
         PrintWriter pw2 = new PrintWriter(fw2);
         int counter=0;
         int t=0;
         String [][]normalizedForexPrice = new String [ForexPrice.length][ForexPrice[0].length];
-        String [][]unlabeledNormalizedForexPrice = new String [ForexPrice.length][ForexPrice[0].length];
+        String [][]normalizedForexPriceTestSet = new String [ForexPrice.length][ForexPrice[0].length];
         String [][]ForexPriceTrainingSet = new String [ForexPrice.length][ForexPrice[0].length];
-        String [][]unlabeledForexPriceTrainingSet = new String [ForexPrice.length][ForexPrice[0].length];
+        String [][]ForexPriceTestSet = new String [ForexPrice.length][ForexPrice[0].length];
         pw.println("@RELATION normalizedForexPrice");
         pw.println("");
         pw.println("@ATTRIBUTE open real");
@@ -155,15 +157,17 @@ public class ForexFileWriter {
         pw.println("@ATTRIBUTE low real");
         pw.println("@ATTRIBUTE close real");
         pw.println("@ATTRIBUTE close2 real");
+        pw.println("");
         pw.println("@data");
         
-        pw2.println("@RELATION unlabeledNormalizedForexPrice");
+        pw2.println("@RELATION normalizedForexPriceTestSet");
         pw2.println("");
         pw2.println("@ATTRIBUTE open real");
         pw2.println("@ATTRIBUTE high real");
         pw2.println("@ATTRIBUTE low real");
         pw2.println("@ATTRIBUTE close real");
         pw2.println("@ATTRIBUTE close2 real");
+        pw2.println("");
         pw2.println("@data");
         
         //count for row to divide between training set and test set
@@ -172,7 +176,7 @@ public class ForexFileWriter {
         }
         
         //differentiate the training set
-        for(int i=0;i<counter*0.8;i++)
+        for(int i=0;i<=counter*0.8;i++)
         {
             for(int j=0;j<ForexPrice[0].length;j++)
             {
@@ -185,23 +189,23 @@ public class ForexFileWriter {
         {
             for(int j=0;j<ForexPrice[0].length;j++)
             {
-                unlabeledForexPriceTrainingSet[t][j] = ForexPrice[i][j]; 
+                ForexPriceTestSet[t][j] = ForexPrice[i][j]; 
             }
             t++;
         }
         
         //write price to ARFF
-        normalizedForexPrice = rawForexPriceNormalization(ForexPriceTrainingSet);
+        normalizedForexPrice = rawForexPriceNormalization(ForexPriceTrainingSet,findMinMax(ForexPriceTrainingSet, 2),findMinMax(ForexPriceTrainingSet, 3),findMinMax(ForexPriceTrainingSet, 4),findMinMax(ForexPriceTrainingSet, 5),findMinMax(ForexPriceTrainingSet, 6));
         //write price to ARFF open, high, low, close, close2
         for(int i=1;(i<=counter*0.8);i++)
         {
             pw.println(normalizedForexPrice[i-1][2]+","+normalizedForexPrice[i-1][3]+","+normalizedForexPrice[i-1][4]+","+normalizedForexPrice[i-1][5]+","+normalizedForexPrice[i][5]);
         }
         
-        unlabeledNormalizedForexPrice = rawForexPriceNormalization(unlabeledForexPriceTrainingSet);
+        normalizedForexPriceTestSet = rawForexPriceNormalization(ForexPriceTestSet,findMinMax(ForexPriceTrainingSet, 2),findMinMax(ForexPriceTrainingSet, 3),findMinMax(ForexPriceTrainingSet, 4),findMinMax(ForexPriceTrainingSet, 5),findMinMax(ForexPriceTrainingSet, 6));
         for(int i=1;(i<t);i++)
         {
-            pw2.println(unlabeledNormalizedForexPrice[i-1][2]+","+unlabeledNormalizedForexPrice[i-1][3]+","+unlabeledNormalizedForexPrice[i-1][4]+","+unlabeledNormalizedForexPrice[i-1][5]+",?");
+            pw2.println(normalizedForexPriceTestSet[i-1][2]+","+normalizedForexPriceTestSet[i-1][3]+","+normalizedForexPriceTestSet[i-1][4]+","+normalizedForexPriceTestSet[i-1][5]+","+normalizedForexPriceTestSet[i][5]);
         }
         
         //Flush the output to the file
@@ -244,7 +248,7 @@ public class ForexFileWriter {
     public static void MACDToArff (String[][] MACDPrice) throws IOException{
         FileWriter fw = new FileWriter("MACDRecommendation.arff");
         PrintWriter pw = new PrintWriter(fw);
-        FileWriter fw2 = new FileWriter("unlabeledMACDRecommendation.arff");
+        FileWriter fw2 = new FileWriter("MACDRecommendationTestSet.arff");
         PrintWriter pw2 = new PrintWriter(fw2);
         int counter=0;
         
@@ -253,13 +257,15 @@ public class ForexFileWriter {
         pw.println("@ATTRIBUTE histogram1 real");
         pw.println("@ATTRIBUTE histogram2 real");
         pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
+        pw.println("");
         pw.println("@data");
         
-        pw2.println("@RELATION unlabeledMACDRecommendation");
+        pw2.println("@RELATION MACDRecommendationTestSet");
         pw2.println("");
         pw2.println("@ATTRIBUTE histogram1 real");
         pw2.println("@ATTRIBUTE histogram2 real");
         pw2.println("@ATTRIBUTE recommendation {buy,sell,stall}");
+        pw2.println("");
         pw2.println("@data");
         
         //count for row to divide between training set and test set
@@ -275,7 +281,7 @@ public class ForexFileWriter {
         
         for(int j=(int) Math.ceil(counter*0.8);MACDPrice[j][0]!=null;j++)
         {
-            pw2.println(MACDPrice[j-1][2]+","+MACDPrice[j][2]+",?");
+            pw2.println(MACDPrice[j-1][2]+","+MACDPrice[j][2]+","+MACDPrice[j][3]);
         }
         
         //Flush the output to the file
@@ -294,27 +300,29 @@ public class ForexFileWriter {
     public static void NormalizedMACDToArff (String[][] MACDPrice) throws IOException{
         FileWriter fw = new FileWriter("normalizedMACDRecommendation.arff");
         PrintWriter pw = new PrintWriter(fw);
-        FileWriter fw2 = new FileWriter("unlabeledNormalizedMACDRecommendation.arff");
+        FileWriter fw2 = new FileWriter("normalizedMACDRecommendationTestSet.arff");
         PrintWriter pw2 = new PrintWriter(fw2);
         int counter=0;
         int t=0;
         String [][]normalizedMACDPrice = new String [MACDPrice.length][MACDPrice[0].length];
         String [][]MACDTrainingSet = new String [MACDPrice.length][MACDPrice[0].length];
-        String [][]unlabeledNormalizedMACDPrice = new String [MACDPrice.length][MACDPrice[0].length];
-        String [][]unlabeledMACDTrainingSet = new String [MACDPrice.length][MACDPrice[0].length];
+        String [][]normalizedMACDPriceTestSet = new String [MACDPrice.length][MACDPrice[0].length];
+        String [][]MACDTestSet = new String [MACDPrice.length][MACDPrice[0].length];
         
         pw.println("@RELATION MACDRecommendation");
         pw.println("");
         pw.println("@ATTRIBUTE histogram1 real");
         pw.println("@ATTRIBUTE histogram2 real");
         pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
+        pw.println("");
         pw.println("@data");
         
-        pw2.println("@RELATION unlabeledMACDRecommendation");
+        pw2.println("@RELATION MACDRecommendationTestSet");
         pw2.println("");
         pw2.println("@ATTRIBUTE histogram1 real");
         pw2.println("@ATTRIBUTE histogram2 real");
         pw2.println("@ATTRIBUTE recommendation {buy,sell,stall}");
+        pw2.println("");
         pw2.println("@data");
        
         
@@ -324,7 +332,7 @@ public class ForexFileWriter {
         }
         
         //differentiate the training set
-        for(int i=0;i<counter*0.8;i++)
+        for(int i=0;i<=counter*0.8;i++)
         {
             for(int j=0;j<MACDPrice[0].length;j++)
             {
@@ -336,23 +344,23 @@ public class ForexFileWriter {
         {
             for(int j=0;j<MACDPrice[0].length;j++)
             {
-                unlabeledMACDTrainingSet[t][j] = MACDPrice[i][j]; 
+                MACDTestSet[t][j] = MACDPrice[i][j]; 
             }
             t++;
         }
         
         
         //write price to ARFF
-        normalizedMACDPrice = MACDPriceNormalization(MACDTrainingSet);
+        normalizedMACDPrice = MACDPriceNormalization(MACDTrainingSet,findMinMax(MACDTrainingSet, 2));
         for(int i=1;(i<=counter*0.8);i++)
         {
             pw.println(normalizedMACDPrice[i-1][2]+","+normalizedMACDPrice[i][2]+","+normalizedMACDPrice[i][3]);
         }
         
-        unlabeledNormalizedMACDPrice = MACDPriceNormalization(unlabeledMACDTrainingSet);
+        normalizedMACDPriceTestSet = MACDPriceNormalization(MACDTestSet,findMinMax(MACDTrainingSet, 2));
         for(int i=1;(i<t);i++)
         {
-            pw2.println(unlabeledNormalizedMACDPrice[i-1][2]+","+unlabeledNormalizedMACDPrice[i][2]+",?");
+            pw2.println(normalizedMACDPriceTestSet[i-1][2]+","+normalizedMACDPriceTestSet[i][2]+","+normalizedMACDPriceTestSet[i][3]);
         }
         
         //Flush the output to the file
