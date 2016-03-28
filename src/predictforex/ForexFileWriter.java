@@ -91,6 +91,7 @@ public class ForexFileWriter {
         
         pw.println("@RELATION "+ PredictForex.filename +"_forexPrice");
         pw.println("");
+        pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE open real");
         pw.println("@ATTRIBUTE high real");
         pw.println("@ATTRIBUTE low real");
@@ -101,6 +102,7 @@ public class ForexFileWriter {
         
         pw2.println("@RELATION "+ PredictForex.filename +"_forexPriceTestSet");
         pw2.println("");
+        pw2.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw2.println("@ATTRIBUTE open real");
         pw2.println("@ATTRIBUTE high real");
         pw2.println("@ATTRIBUTE low real");
@@ -117,12 +119,12 @@ public class ForexFileWriter {
         //write price to ARFF open, high, low, close, close2
         for(int i=1;(i<=counter*0.8);i++)
         {
-                pw.println(ForexPrice[i-1][2]+","+ForexPrice[i-1][3]+","+ForexPrice[i-1][4]+","+ForexPrice[i-1][5]+","+ForexPrice[i][5]);
+                pw.println("\""+ForexPrice[i-1][0]+" "+ForexPrice[i-1][1]+"\","+ForexPrice[i-1][2]+","+ForexPrice[i-1][3]+","+ForexPrice[i-1][4]+","+ForexPrice[i-1][5]+","+ForexPrice[i][5]);
         }
         
         for(int j=(int) Math.ceil(counter*0.8);ForexPrice[j][0]!=null;j++)
         {
-            pw2.println(ForexPrice[j-1][2]+","+ForexPrice[j-1][3]+","+ForexPrice[j-1][4]+","+ForexPrice[j-1][5]+","+ForexPrice[j][5]);
+            pw2.println("\""+ForexPrice[j-1][0]+" "+ForexPrice[j-1][1]+"\","+ForexPrice[j-1][2]+","+ForexPrice[j-1][3]+","+ForexPrice[j-1][4]+","+ForexPrice[j-1][5]+","+ForexPrice[j][5]);
         }
         
         //Flush the output to the file
@@ -152,6 +154,7 @@ public class ForexFileWriter {
         String [][]ForexPriceTestSet = new String [ForexPrice.length][ForexPrice[0].length];
         pw.println("@RELATION "+ PredictForex.filename +"_normalizedForexPrice");
         pw.println("");
+        pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE open real");
         pw.println("@ATTRIBUTE high real");
         pw.println("@ATTRIBUTE low real");
@@ -162,6 +165,7 @@ public class ForexFileWriter {
         
         pw2.println("@RELATION "+ PredictForex.filename +"_normalizedForexPriceTestSet");
         pw2.println("");
+        pw2.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw2.println("@ATTRIBUTE open real");
         pw2.println("@ATTRIBUTE high real");
         pw2.println("@ATTRIBUTE low real");
@@ -199,13 +203,13 @@ public class ForexFileWriter {
         //write price to ARFF open, high, low, close, close2
         for(int i=1;(i<=counter*0.8);i++)
         {
-            pw.println(normalizedForexPrice[i-1][2]+","+normalizedForexPrice[i-1][3]+","+normalizedForexPrice[i-1][4]+","+normalizedForexPrice[i-1][5]+","+normalizedForexPrice[i][5]);
+            pw.println("\""+normalizedForexPrice[i-1][0]+" "+normalizedForexPrice[i-1][1]+"\","+normalizedForexPrice[i-1][2]+","+normalizedForexPrice[i-1][3]+","+normalizedForexPrice[i-1][4]+","+normalizedForexPrice[i-1][5]+","+normalizedForexPrice[i][5]);
         }
         
         normalizedForexPriceTestSet = rawForexPriceNormalization(ForexPriceTestSet,findMinMax(ForexPriceTrainingSet, 2),findMinMax(ForexPriceTrainingSet, 3),findMinMax(ForexPriceTrainingSet, 4),findMinMax(ForexPriceTrainingSet, 5),findMinMax(ForexPriceTrainingSet, 6));
         for(int i=1;(i<t);i++)
         {
-            pw2.println(normalizedForexPriceTestSet[i-1][2]+","+normalizedForexPriceTestSet[i-1][3]+","+normalizedForexPriceTestSet[i-1][4]+","+normalizedForexPriceTestSet[i-1][5]+","+normalizedForexPriceTestSet[i][5]);
+            pw2.println("\""+normalizedForexPriceTestSet[i-1][0]+" "+normalizedForexPriceTestSet[i-1][1]+"\","+normalizedForexPriceTestSet[i-1][2]+","+normalizedForexPriceTestSet[i-1][3]+","+normalizedForexPriceTestSet[i-1][4]+","+normalizedForexPriceTestSet[i-1][5]+","+normalizedForexPriceTestSet[i][5]);
         }
         
         //Flush the output to the file
@@ -254,6 +258,7 @@ public class ForexFileWriter {
         
         pw.println("@RELATION "+ PredictForex.filename+"_MACDRecommendation");
         pw.println("");
+        pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE histogram1 real");
         pw.println("@ATTRIBUTE histogram2 real");
         pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
@@ -262,6 +267,7 @@ public class ForexFileWriter {
         
         pw2.println("@RELATION  "+ PredictForex.filename+"_MACDRecommendationTestSet");
         pw2.println("");
+        pw2.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw2.println("@ATTRIBUTE histogram1 real");
         pw2.println("@ATTRIBUTE histogram2 real");
         pw2.println("@ATTRIBUTE recommendation {buy,sell,stall}");
@@ -276,12 +282,12 @@ public class ForexFileWriter {
         //write price to ARFF
         for(int i=1;(i<=counter*0.8);i++)
         {
-            pw.println(MACDPrice[i-1][2]+","+MACDPrice[i][2]+","+MACDPrice[i][3]);
+            pw.println("\""+MACDPrice[i-1][0]+" "+MACDPrice[i-1][1]+"\","+MACDPrice[i-1][2]+","+MACDPrice[i][2]+","+MACDPrice[i][3]);
         }
         
         for(int j=(int) Math.ceil(counter*0.8);MACDPrice[j][0]!=null;j++)
         {
-            pw2.println(MACDPrice[j-1][2]+","+MACDPrice[j][2]+","+MACDPrice[j][3]);
+            pw2.println("\""+MACDPrice[j-1][0]+" "+MACDPrice[j-1][1]+"\","+MACDPrice[j-1][2]+","+MACDPrice[j][2]+","+MACDPrice[j][3]);
         }
         
         //Flush the output to the file
@@ -311,6 +317,7 @@ public class ForexFileWriter {
         
         pw.println("@RELATION "+ PredictForex.filename+"_MACDRecommendation");
         pw.println("");
+        pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE histogram1 real");
         pw.println("@ATTRIBUTE histogram2 real");
         pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
@@ -319,6 +326,7 @@ public class ForexFileWriter {
         
         pw2.println("@RELATION "+ PredictForex.filename+"_MACDRecommendationTestSet");
         pw2.println("");
+        pw2.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw2.println("@ATTRIBUTE histogram1 real");
         pw2.println("@ATTRIBUTE histogram2 real");
         pw2.println("@ATTRIBUTE recommendation {buy,sell,stall}");
@@ -354,13 +362,13 @@ public class ForexFileWriter {
         normalizedMACDPrice = MACDPriceNormalization(MACDTrainingSet,findMinMax(MACDTrainingSet, 2));
         for(int i=1;(i<=counter*0.8);i++)
         {
-            pw.println(normalizedMACDPrice[i-1][2]+","+normalizedMACDPrice[i][2]+","+normalizedMACDPrice[i][3]);
+            pw.println("\""+normalizedMACDPrice[i-1][0]+" "+normalizedMACDPrice[i-1][1]+"\","+normalizedMACDPrice[i-1][2]+","+normalizedMACDPrice[i][2]+","+normalizedMACDPrice[i][3]);
         }
         
         normalizedMACDPriceTestSet = MACDPriceNormalization(MACDTestSet,findMinMax(MACDTrainingSet, 2));
         for(int i=1;(i<t);i++)
         {
-            pw2.println(normalizedMACDPriceTestSet[i-1][2]+","+normalizedMACDPriceTestSet[i][2]+","+normalizedMACDPriceTestSet[i][3]);
+            pw2.println("\""+normalizedMACDPrice[i-1][0]+" "+normalizedMACDPrice[i-1][1]+"\","+normalizedMACDPriceTestSet[i-1][2]+","+normalizedMACDPriceTestSet[i][2]+","+normalizedMACDPriceTestSet[i][3]);
         }
         
         //Flush the output to the file
@@ -383,6 +391,7 @@ public class ForexFileWriter {
         
         pw.println("@RELATION "+ PredictForex.unlabeledFilename);
         pw.println("");
+        pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE open real");
         pw.println("@ATTRIBUTE high real");
         pw.println("@ATTRIBUTE low real");
@@ -394,7 +403,7 @@ public class ForexFileWriter {
         //write price to ARFF open, high, low, close, close2
         for(int i=1;ForexPrice[i][0]!=null;i++)
         {
-                pw.println(ForexPrice[i-1][2]+","+ForexPrice[i-1][3]+","+ForexPrice[i-1][4]+","+ForexPrice[i-1][5]+",?");
+                pw.println("\""+ForexPrice[i-1][0]+" "+ForexPrice[i-1][1]+"\","+ForexPrice[i-1][2]+","+ForexPrice[i-1][3]+","+ForexPrice[i-1][4]+","+ForexPrice[i-1][5]+",?");
         }
         
         //Flush the output to the file

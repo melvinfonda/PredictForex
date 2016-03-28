@@ -44,7 +44,7 @@ public class PredictForex {
 //        ForexFileWriter tesANN = new ForexFileWriter();
 //        tesANN.normalizedForexPriceToArff(forexPairData);
 //        tesANN.rawForexPriceToArff(forexPairData);
-     //   ForexFileWriter.rawForexPriceToArff(forexPairData);
+//        ForexFileWriter.rawForexPriceToArff(forexPairData);
         
         
         BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
