@@ -20,8 +20,9 @@ public class MACD {
     public String[][] MACDLine = new String[ForexFileReader.row][3]; 
     public String[][] SignalLine = new String[ForexFileReader.row][3]; 
     public String[][] Histogram = new String[ForexFileReader.row][3];
-    public String[][] Recommendation = new String[ForexFileReader.row][4];
+    public String[][] Recommendation = new String[ForexFileReader.row][8];
     String polarity="neutral";
+    int OHLCcounter=-9999; //counter for locating the open high low and close value for the current time and date
     
     public double SMA (double totalPrice, int periods){    
         return (totalPrice) / (periods);  
@@ -157,7 +158,7 @@ public class MACD {
              }
              //ForexFileReader.printMatrix(SignalLine);
              
-             //calculate MACDLine
+             //calculate Histogram
              j=8;
              for (int i=0 ; SignalLine[i][0]!=null ; i++)
              {
@@ -173,6 +174,13 @@ public class MACD {
 //             matrixToCSV(Histogram);
              
             //give recommendation from intersection between signal and macd line
+             for(int i=0;rawForexPrice[i][0]!=null&&OHLCcounter==-9999;i++){
+                    if(Histogram[0][0].equals(rawForexPrice[i][0]) && Histogram[0][1].equals(rawForexPrice[i][1]) )
+                    {
+                        OHLCcounter = i+1;
+                    }
+             }
+             
              j=0;
              for (int i=1 ; Histogram[i][0]!=null ; i++)
              {
@@ -195,6 +203,17 @@ public class MACD {
                         Recommendation[j][3] = "buy";
                     }
                 }
+                
+                //copy open
+                Recommendation[j][4] = rawForexPrice[OHLCcounter][2]; 
+                //copy high
+                Recommendation[j][5] = rawForexPrice[OHLCcounter][3]; 
+                //copy low
+                Recommendation[j][6] = rawForexPrice[OHLCcounter][4]; 
+                //copy close
+                Recommendation[j][7] = rawForexPrice[OHLCcounter][5];
+                    
+                OHLCcounter++;
                 j++;
              }
 //             ForexFileReader.printMatrix(Recommendation);

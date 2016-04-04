@@ -27,50 +27,50 @@ public class PredictForex {
      */
     public static void main(String[] args) throws FileNotFoundException, IOException, Exception {
         
-//        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-//        filename = bufferRead.readLine();
-//        
-//        /*TES BACA CSV*/
-//        ForexFileReader tes = new ForexFileReader();
-//        forexPairData = tes.forexPrice(filename+".csv");
-//        //tes.printRawData(forexPairData);
-//        
-//    
-//        /*TES MACD*/
-//        MACD tesMACD = new MACD();
-//        tesMACD.MACDAnalysis(forexPairData);   
-//        
-//        /*TES ForexFileWriter */
-//        ForexFileWriter tesANN = new ForexFileWriter();
-//        tesANN.normalizedForexPriceToArff(forexPairData);
-//        tesANN.rawForexPriceToArff(forexPairData);
-//        ForexFileWriter.rawForexPriceToArff(forexPairData);
-        
-        
         BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-        unlabeledFilename = bufferRead.readLine();
+        filename = bufferRead.readLine();
         
+        /*TES BACA CSV*/
         ForexFileReader tes = new ForexFileReader();
-        forexPairData = tes.forexPrice(unlabeledFilename+".csv");
-        ForexFileWriter.unlabeledForexPriceToArff(forexPairData);
-        /*WEKA*/
-        WEKA weka = new WEKA();
-        // membaca dataset awal
-        WEKA.ReadDataset(unlabeledFilename+".arff");
-////        
-//
-////
-////        /* aNN */
-//        TenFoldTrain_aNN();
-////        FullTraining_aNN();
-////        
-//        // membuat model dan menyimpannya
-//        WEKA.SaveModel(new MultilayerPerceptron());
-////        // membaca model yang telah disimpan pada file eksternal
-        WEKA.ReadModel("coba.model");
+        forexPairData = tes.forexPrice(filename+".csv");
+        //tes.printRawData(forexPairData);
+        
+    
+        /*TES MACD*/
+        MACD tesMACD = new MACD();
+        tesMACD.MACDAnalysis(forexPairData);   
+        
+        /*TES ForexFileWriter */
+        ForexFileWriter tesANN = new ForexFileWriter();
+        tesANN.normalizedForexPriceToArff(forexPairData);
+        tesANN.rawForexPriceToArff(forexPairData);
+        ForexFileWriter.rawForexPriceToArff(forexPairData);
+        
+        
+//        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+//        unlabeledFilename = bufferRead.readLine();
 //        
-//        // melakukan klasifikasi terhadap suatu dataset yang belum terlabel berdasarkan model yang telah diload
-        WEKA.Classify(unlabeledFilename+".arff");
+//        ForexFileReader tes = new ForexFileReader();
+//        forexPairData = tes.forexPrice(unlabeledFilename+".csv");
+//        ForexFileWriter.unlabeledForexPriceToArff(forexPairData);
+//        /*WEKA*/
+//        WEKA weka = new WEKA();
+//        // membaca dataset awal
+//        WEKA.ReadDataset(unlabeledFilename+".arff");
+//////        
+////
+//////
+//////        /* aNN */
+////        TenFoldTrain_aNN();
+//////        FullTraining_aNN();
+//////        
+////        // membuat model dan menyimpannya
+////        WEKA.SaveModel(new MultilayerPerceptron());
+//////        // membaca model yang telah disimpan pada file eksternal
+//        WEKA.ReadModel("coba.model");
+////        
+////        // melakukan klasifikasi terhadap suatu dataset yang belum terlabel berdasarkan model yang telah diload
+//        WEKA.Classify(unlabeledFilename+".arff");
      } 
     
 }
