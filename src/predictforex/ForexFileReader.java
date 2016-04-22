@@ -20,7 +20,7 @@ public class ForexFileReader {
     public static final int column =7;
         
     //turn csv file to raw data    
-    public String[][] forexPrice(String csvFile) {
+    public String[][] loadForexPrice(String csvFile) {
         String[][] rawForexData = new String[rawRow][column];
         String[][] forexData = new String[row][column];
         BufferedReader br = null;

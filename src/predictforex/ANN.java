@@ -22,7 +22,7 @@ import weka.core.converters.ConverterUtils.DataSource;
 import weka.filters.Filter;
 import weka.filters.unsupervised.attribute.Remove;
 
-public class WEKA {
+public class ANN {
     private static Instances dataset;
     private static Classifier clasifier;
     private static Evaluation eval;
@@ -86,7 +86,7 @@ public class WEKA {
 //            System.out.print(", close: " + labeled.instance(i).value(4));
 //            System.out.println(", predicted close: " + labeled.instance(i).value(5));
         }
-        DataSink.write("Labeled_"+PredictForex.unlabeledFilename+".arff", labeled);
+        DataSink.write("arff_files/"+"Labeled_"+ForexPredictor.unlabeledFilename+".arff", labeled);
         
     }
     

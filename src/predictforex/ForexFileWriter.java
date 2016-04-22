@@ -83,13 +83,13 @@ public class ForexFileWriter {
     
     //to save matriks from raw forex price to arff format
     public static void rawForexPriceToArff (String[][] ForexPrice) throws IOException{
-        FileWriter fw = new FileWriter(PredictForex.filename+"_forexPrice.arff");
+        FileWriter fw = new FileWriter("arff_files/"+ForexPredictor.filename+"_forexPrice.arff");
         PrintWriter pw = new PrintWriter(fw);
-        FileWriter fw2 = new FileWriter(PredictForex.filename+"_ForexPriceTestSet.arff");
+        FileWriter fw2 = new FileWriter("arff_files/"+ForexPredictor.filename+"_ForexPriceTestSet.arff");
         PrintWriter pw2 = new PrintWriter(fw2);
         int counter=0;
         
-        pw.println("@RELATION "+ PredictForex.filename +"_forexPrice");
+        pw.println("@RELATION "+ ForexPredictor.filename +"_forexPrice");
         pw.println("");
         pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE open real");
@@ -100,7 +100,7 @@ public class ForexFileWriter {
         pw.println("");
         pw.println("@data");
         
-        pw2.println("@RELATION "+ PredictForex.filename +"_forexPriceTestSet");
+        pw2.println("@RELATION "+ ForexPredictor.filename +"_forexPriceTestSet");
         pw2.println("");
         pw2.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw2.println("@ATTRIBUTE open real");
@@ -142,9 +142,9 @@ public class ForexFileWriter {
     
         //to save matriks to arff format
     public static void normalizedForexPriceToArff (String[][] ForexPrice) throws IOException{
-        FileWriter fw = new FileWriter(PredictForex.filename+"_normalizedForexPrice.arff");
+        FileWriter fw = new FileWriter("arff_files/"+ForexPredictor.filename+"_normalizedForexPrice.arff");
         PrintWriter pw = new PrintWriter(fw);
-        FileWriter fw2 = new FileWriter(PredictForex.filename+"_normalizedForexPriceTestSet.arff");
+        FileWriter fw2 = new FileWriter("arff_files/"+ForexPredictor.filename+"_normalizedForexPriceTestSet.arff");
         PrintWriter pw2 = new PrintWriter(fw2);
         int counter=0;
         int t=0;
@@ -152,7 +152,7 @@ public class ForexFileWriter {
         String [][]normalizedForexPriceTestSet = new String [ForexPrice.length][ForexPrice[0].length];
         String [][]ForexPriceTrainingSet = new String [ForexPrice.length][ForexPrice[0].length];
         String [][]ForexPriceTestSet = new String [ForexPrice.length][ForexPrice[0].length];
-        pw.println("@RELATION "+ PredictForex.filename +"_normalizedForexPrice");
+        pw.println("@RELATION "+ ForexPredictor.filename +"_normalizedForexPrice");
         pw.println("");
         pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE open real");
@@ -163,7 +163,7 @@ public class ForexFileWriter {
         pw.println("");
         pw.println("@data");
         
-        pw2.println("@RELATION "+ PredictForex.filename +"_normalizedForexPriceTestSet");
+        pw2.println("@RELATION "+ ForexPredictor.filename +"_normalizedForexPriceTestSet");
         pw2.println("");
         pw2.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw2.println("@ATTRIBUTE open real");
@@ -227,7 +227,7 @@ public class ForexFileWriter {
     
     public static void MACDPriceToCSV(String[][] MACDPrice) throws IOException
     {
-        FileWriter fw = new FileWriter(PredictForex.filename+"_MACDPrice.csv");
+        FileWriter fw = new FileWriter("csv_files/"+ForexPredictor.filename+"_MACDPrice.csv");
         PrintWriter pw = new PrintWriter(fw);
         
         for(int i=0;MACDPrice[i][0]!=null;i++){
@@ -250,13 +250,13 @@ public class ForexFileWriter {
     }
     
     public static void MACDToArff (String[][] MACDPrice) throws IOException{
-        FileWriter fw = new FileWriter(PredictForex.filename+"_MACDRecommendation.arff");
+        FileWriter fw = new FileWriter("arff_files/"+ForexPredictor.filename+"_MACDRecommendation.arff");
         PrintWriter pw = new PrintWriter(fw);
-        FileWriter fw2 = new FileWriter(PredictForex.filename+"_MACDRecommendationTestSet.arff");
+        FileWriter fw2 = new FileWriter("arff_files/"+ForexPredictor.filename+"_MACDRecommendationTestSet.arff");
         PrintWriter pw2 = new PrintWriter(fw2);
         int counter=0;
         
-        pw.println("@RELATION "+ PredictForex.filename+"_MACDRecommendation");
+        pw.println("@RELATION "+ ForexPredictor.filename+"_MACDRecommendation");
         pw.println("");
         pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE open real");
@@ -269,7 +269,7 @@ public class ForexFileWriter {
         pw.println("");
         pw.println("@data");
         
-        pw2.println("@RELATION  "+ PredictForex.filename+"_MACDRecommendationTestSet");
+        pw2.println("@RELATION  "+ ForexPredictor.filename+"_MACDRecommendationTestSet");
         pw2.println("");
         pw2.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw2.println("@ATTRIBUTE open real");
@@ -311,19 +311,12 @@ public class ForexFileWriter {
         fw2.close();
     }
     
-    public static void NormalizedMACDToArff (String[][] MACDPrice) throws IOException{
-        FileWriter fw = new FileWriter(PredictForex.filename+"_normalizedMACDRecommendation.arff");
+    public static void unlabeledMACDToArff (String[][] MACDPrice) throws IOException{
+        FileWriter fw = new FileWriter("arff_files/"+ForexPredictor.filename+"_unlabeledMACDRecommendation.arff");
         PrintWriter pw = new PrintWriter(fw);
-        FileWriter fw2 = new FileWriter(PredictForex.filename+"_normalizedMACDRecommendationTestSet.arff");
-        PrintWriter pw2 = new PrintWriter(fw2);
         int counter=0;
-        int t=0;
-        String [][]normalizedMACDPrice = new String [MACDPrice.length][MACDPrice[0].length];
-        String [][]MACDTrainingSet = new String [MACDPrice.length][MACDPrice[0].length];
-        String [][]normalizedMACDPriceTestSet = new String [MACDPrice.length][MACDPrice[0].length];
-        String [][]MACDTestSet = new String [MACDPrice.length][MACDPrice[0].length];
         
-        pw.println("@RELATION "+ PredictForex.filename+"_MACDRecommendation");
+        pw.println("@RELATION "+ ForexPredictor.filename+"_MACDRecommendation");
         pw.println("");
         pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE open real");
@@ -336,7 +329,48 @@ public class ForexFileWriter {
         pw.println("");
         pw.println("@data");
         
-        pw2.println("@RELATION "+ PredictForex.filename+"_MACDRecommendationTestSet");
+        //write price to ARFF
+        for(int i=1;MACDPrice[i][0]!=null;i++)
+        {
+            pw.println("\""+MACDPrice[i-1][0]+" "+MACDPrice[i-1][1]+"\","+MACDPrice[i-1][4]+","+MACDPrice[i-1][5]+","+MACDPrice[i-1][6]+","+MACDPrice[i-1][7]+","+MACDPrice[i-1][2]+","+MACDPrice[i][2]+",?");
+        }
+        
+        //Flush the output to the file
+        pw.flush();
+
+        //Close the Print Writer
+        pw.close();
+
+        //Close the File Writer
+        fw.close();
+    }
+    
+    public static void NormalizedMACDToArff (String[][] MACDPrice) throws IOException{
+        FileWriter fw = new FileWriter("arff_files/"+ForexPredictor.filename+"_normalizedMACDRecommendation.arff");
+        PrintWriter pw = new PrintWriter(fw);
+        FileWriter fw2 = new FileWriter("arff_files/"+ForexPredictor.filename+"_normalizedMACDRecommendationTestSet.arff");
+        PrintWriter pw2 = new PrintWriter(fw2);
+        int counter=0;
+        int t=0;
+        String [][]normalizedMACDPrice = new String [MACDPrice.length][MACDPrice[0].length];
+        String [][]MACDTrainingSet = new String [MACDPrice.length][MACDPrice[0].length];
+        String [][]normalizedMACDPriceTestSet = new String [MACDPrice.length][MACDPrice[0].length];
+        String [][]MACDTestSet = new String [MACDPrice.length][MACDPrice[0].length];
+        
+        pw.println("@RELATION "+ ForexPredictor.filename+"_MACDRecommendation");
+        pw.println("");
+        pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
+        pw.println("@ATTRIBUTE open real");
+        pw.println("@ATTRIBUTE high real");
+        pw.println("@ATTRIBUTE low real");
+        pw.println("@ATTRIBUTE close real");
+        pw.println("@ATTRIBUTE histogram1 real");
+        pw.println("@ATTRIBUTE histogram2 real");
+        pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
+        pw.println("");
+        pw.println("@data");
+        
+        pw2.println("@RELATION "+ ForexPredictor.filename+"_MACDRecommendationTestSet");
         pw2.println("");
         pw2.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw2.println("@ATTRIBUTE open real");
@@ -401,11 +435,11 @@ public class ForexFileWriter {
     }
     
     public static void unlabeledForexPriceToArff (String[][] ForexPrice) throws IOException{
-        FileWriter fw = new FileWriter(PredictForex.unlabeledFilename+".arff");
+        FileWriter fw = new FileWriter("arff_files/"+ForexPredictor.unlabeledFilename+".arff");
         PrintWriter pw = new PrintWriter(fw);
         int counter=0;
         
-        pw.println("@RELATION "+ PredictForex.unlabeledFilename);
+        pw.println("@RELATION "+ ForexPredictor.unlabeledFilename);
         pw.println("");
         pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE open real");

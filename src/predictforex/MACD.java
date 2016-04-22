@@ -17,10 +17,10 @@ import java.util.Arrays;
  * @author Melvin
  */
 public class MACD {
-    public String[][] MACDLine = new String[ForexFileReader.row][3]; 
-    public String[][] SignalLine = new String[ForexFileReader.row][3]; 
-    public String[][] Histogram = new String[ForexFileReader.row][3];
-    public String[][] Recommendation = new String[ForexFileReader.row][8];
+    private String[][] MACDLine = new String[ForexFileReader.row][3]; 
+    private String[][] SignalLine = new String[ForexFileReader.row][3]; 
+    private String[][] Histogram = new String[ForexFileReader.row][3];
+    public static String[][] Recommendation = new String[ForexFileReader.row][8];
     String polarity="neutral";
     int OHLCcounter=-9999; //counter for locating the open high low and close value for the current time and date
     
@@ -218,8 +218,8 @@ public class MACD {
              }
 //             ForexFileReader.printMatrix(Recommendation);
              ForexFileWriter.MACDPriceToCSV(Recommendation);
-             ForexFileWriter.MACDToArff(Recommendation);
-             ForexFileWriter.NormalizedMACDToArff(Recommendation);
+             //ForexFileWriter.MACDToArff(Recommendation);
+             //ForexFileWriter.NormalizedMACDToArff(Recommendation);
      }
     
     

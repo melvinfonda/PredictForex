@@ -7,6 +7,9 @@
 package predictforex;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -14,13 +17,60 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author Melvin
  */
-public class PredictForexUI extends javax.swing.JFrame {
-    boolean showText = false;
+public class ForexPredictor extends javax.swing.JFrame {
     File file;
+    private static String[][] forexPairData;
+    public static String filename="";
+    public static String unlabeledFilename="";
+    private String option;
+        /**
+     * @param args the command line arguments
+     * @throws java.io.FileNotFoundException
+     */
+    
+    public void useMACD(String[][] forexPairData) throws IOException
+    {
+        MACD MACDIndicator = new MACD();
+        MACDIndicator.MACDAnalysis(forexPairData);   
+    }
+    
+    public void useANN(String[][] forexPairData, String unlabeled) throws IOException, Exception
+    {
+        unlabeledFilename = unlabeled;
+        ForexFileWriter.unlabeledForexPriceToArff(forexPairData);
+        /*ANN*/
+        //read initial dataset
+        ANN.ReadDataset("arff_files/"+unlabeledFilename+".arff");
+        //read the model which going to be used
+        ANN.ReadModel("ANN.model");
+        //classifiy unlabeled arff
+        ANN.Classify("arff_files/"+unlabeledFilename+".arff");
+    }
+    
+    public void useMACDandANN(String[][] forexPairData, String unlabeled) throws IOException, Exception
+    {
+        /*MACD*/
+        //analyze with MACD
+        MACD MACDIndicator = new MACD();
+        MACDIndicator.MACDAnalysis(forexPairData);
+        
+        /*ANN*/
+        //write to arff
+        ForexFileWriter.unlabeledMACDToArff(MACDIndicator.Recommendation);
+        
+        unlabeledFilename = unlabeled+"_MACDRecommendation";
+        //read initial dataset
+        ANN.ReadDataset("arff_files/"+unlabeled+"_unlabeledMACDRecommendation.arff");
+        //read the model which going to be used
+        ANN.ReadModel("ANN.model");
+        //classifiy unlabeled arff
+        ANN.Classify("arff_files/"+unlabeled+"_unlabeledMACDRecommendation.arff");
+        
+    }
     /**
      * Creates new form PredictForexUI
      */
-    public PredictForexUI() {
+    public ForexPredictor() {
         initComponents();
     }
 
@@ -71,12 +121,27 @@ public class PredictForexUI extends javax.swing.JFrame {
 
         buttonGroup1.add(jRadioButton2);
         jRadioButton2.setText("ANN Only");
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(jRadioButton3);
         jRadioButton3.setText("MACD and ANN");
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
 
         jButton1.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         jButton1.setText("Analyze");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jTextField1.setEditable(false);
         jTextField1.addActionListener(new java.awt.event.ActionListener() {
@@ -161,6 +226,7 @@ public class PredictForexUI extends javax.swing.JFrame {
 
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
         // TODO add your handling code here:
+        option = "MACD";
     }//GEN-LAST:event_jRadioButton1ActionPerformed
 
     private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
@@ -181,10 +247,51 @@ public class PredictForexUI extends javax.swing.JFrame {
             file = jfc.getSelectedFile();
             //jTextField1.setText(file.toString());
             jTextField1.setText(jfc.getSelectedFile().getName());
+            filename = jfc.getSelectedFile().getName().substring(0, jfc.getSelectedFile().getName().lastIndexOf('.'));
         } 
         
+            ForexFileReader forexFile = new ForexFileReader();
+            forexPairData = forexFile.loadForexPrice(filename+".csv");
         
     }//GEN-LAST:event_csvUploader
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        // TODO add your handling code here:
+        option = "ANN";
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        // TODO add your handling code here:
+        option = "MACD&ANN";
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        ForexPredictor forexPredictor = new ForexPredictor();
+        
+        if("MACD".equals(option)){
+            try {
+                forexPredictor.useMACD(forexPairData);
+            }
+            catch(Exception IOException){
+            }
+        }
+        else if("ANN".equals(option)){
+            try {
+            forexPredictor.useANN(forexPairData,filename);
+            }
+            catch(Exception IOException){
+            }
+        }
+        else if("MACD&ANN".equals(option)){
+            try {
+                forexPredictor.useMACDandANN(forexPairData,filename);
+            }
+            catch(Exception IOException){
+            }
+        } 
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,20 +310,20 @@ public class PredictForexUI extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(PredictForexUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ForexPredictor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(PredictForexUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ForexPredictor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(PredictForexUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ForexPredictor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(PredictForexUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(ForexPredictor.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new PredictForexUI().setVisible(true);
+                new ForexPredictor().setVisible(true);
             }
         });
     }
