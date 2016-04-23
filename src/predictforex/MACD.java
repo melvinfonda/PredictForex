@@ -218,7 +218,7 @@ public class MACD {
              }
 //             ForexFileReader.printMatrix(Recommendation);
              ForexFileWriter.MACDPriceToCSV(Recommendation);
-             //ForexFileWriter.MACDToArff(Recommendation);
+             ForexFileWriter.MACDToArff(Recommendation);
              //ForexFileWriter.NormalizedMACDToArff(Recommendation);
      }
     

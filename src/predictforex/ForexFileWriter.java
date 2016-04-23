@@ -236,7 +236,8 @@ public class ForexFileWriter {
                 if(j!=MACDPrice[0].length-1)
                     pw.print(",");
             }
-            pw.println("");
+            if(MACDPrice[i+1][0]!=null)
+                pw.println("");
         }        
         
         //Flush the output to the file
@@ -265,7 +266,7 @@ public class ForexFileWriter {
         pw.println("@ATTRIBUTE close real");
         pw.println("@ATTRIBUTE histogram1 real");
         pw.println("@ATTRIBUTE histogram2 real");
-        pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
+        //pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
         pw.println("");
         pw.println("@data");
         
@@ -278,7 +279,7 @@ public class ForexFileWriter {
         pw2.println("@ATTRIBUTE close real");
         pw2.println("@ATTRIBUTE histogram1 real");
         pw2.println("@ATTRIBUTE histogram2 real");
-        pw2.println("@ATTRIBUTE recommendation {buy,sell,stall}");
+        //pw2.println("@ATTRIBUTE recommendation {buy,sell,stall}");
         pw2.println("");
         pw2.println("@data");
         
@@ -290,12 +291,12 @@ public class ForexFileWriter {
         //write price to ARFF
         for(int i=1;(i<=counter*0.8);i++)
         {
-            pw.println("\""+MACDPrice[i-1][0]+" "+MACDPrice[i-1][1]+"\","+MACDPrice[i-1][4]+","+MACDPrice[i-1][5]+","+MACDPrice[i-1][6]+","+MACDPrice[i-1][7]+","+MACDPrice[i-1][2]+","+MACDPrice[i][2]+","+MACDPrice[i][3]);
+            pw.println("\""+MACDPrice[i-1][0]+" "+MACDPrice[i-1][1]+"\","+MACDPrice[i-1][4]+","+MACDPrice[i-1][5]+","+MACDPrice[i-1][6]+","+MACDPrice[i-1][7]+","+MACDPrice[i-1][2]+","+MACDPrice[i][2]);
         }
         
         for(int j=(int) Math.ceil(counter*0.8);MACDPrice[j][0]!=null;j++)
         {
-            pw2.println("\""+MACDPrice[j-1][0]+" "+MACDPrice[j-1][1]+"\","+MACDPrice[j-1][4]+","+MACDPrice[j-1][5]+","+MACDPrice[j-1][6]+","+MACDPrice[j-1][7]+","+MACDPrice[j-1][2]+","+MACDPrice[j][2]+","+MACDPrice[j][3]);
+            pw2.println("\""+MACDPrice[j-1][0]+" "+MACDPrice[j-1][1]+"\","+MACDPrice[j-1][4]+","+MACDPrice[j-1][5]+","+MACDPrice[j-1][6]+","+MACDPrice[j-1][7]+","+MACDPrice[j-1][2]+","+MACDPrice[j][2]);
         }
         
         //Flush the output to the file
@@ -325,14 +326,14 @@ public class ForexFileWriter {
         pw.println("@ATTRIBUTE close real");
         pw.println("@ATTRIBUTE histogram1 real");
         pw.println("@ATTRIBUTE histogram2 real");
-        pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
+        //pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
         pw.println("");
         pw.println("@data");
         
         //write price to ARFF
         for(int i=1;MACDPrice[i][0]!=null;i++)
         {
-            pw.println("\""+MACDPrice[i-1][0]+" "+MACDPrice[i-1][1]+"\","+MACDPrice[i-1][4]+","+MACDPrice[i-1][5]+","+MACDPrice[i-1][6]+","+MACDPrice[i-1][7]+","+MACDPrice[i-1][2]+","+MACDPrice[i][2]+",?");
+            pw.println("\""+MACDPrice[i-1][0]+" "+MACDPrice[i-1][1]+"\","+MACDPrice[i-1][4]+","+MACDPrice[i-1][5]+","+MACDPrice[i-1][6]+","+MACDPrice[i-1][7]+","+MACDPrice[i-1][2]+",?");
         }
         
         //Flush the output to the file

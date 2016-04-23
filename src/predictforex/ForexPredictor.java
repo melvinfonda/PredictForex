@@ -34,20 +34,20 @@ public class ForexPredictor extends javax.swing.JFrame {
         MACDIndicator.MACDAnalysis(forexPairData);   
     }
     
-    public void useANN(String[][] forexPairData, String unlabeled) throws IOException, Exception
+    public void useANN(String[][] forexPairData, String forexFilename) throws IOException, Exception
     {
-        unlabeledFilename = unlabeled;
+        unlabeledFilename = forexFilename;
         ForexFileWriter.unlabeledForexPriceToArff(forexPairData);
         /*ANN*/
         //read initial dataset
         ANN.ReadDataset("arff_files/"+unlabeledFilename+".arff");
         //read the model which going to be used
-        ANN.ReadModel("ANN.model");
+        ANN.ReadModel(unlabeledFilename.substring(0, 14)+"ANN.model");
         //classifiy unlabeled arff
         ANN.Classify("arff_files/"+unlabeledFilename+".arff");
     }
     
-    public void useMACDandANN(String[][] forexPairData, String unlabeled) throws IOException, Exception
+    public void useMACDandANN(String[][] forexPairData, String forexFilename) throws IOException, Exception
     {
         /*MACD*/
         //analyze with MACD
@@ -58,13 +58,13 @@ public class ForexPredictor extends javax.swing.JFrame {
         //write to arff
         ForexFileWriter.unlabeledMACDToArff(MACDIndicator.Recommendation);
         
-        unlabeledFilename = unlabeled+"_MACDRecommendation";
+        unlabeledFilename = forexFilename+"_MACDRecommendation";
         //read initial dataset
-        ANN.ReadDataset("arff_files/"+unlabeled+"_unlabeledMACDRecommendation.arff");
+        ANN.ReadDataset("arff_files/"+forexFilename+"_unlabeledMACDRecommendation.arff");
         //read the model which going to be used
-        ANN.ReadModel("ANN.model");
+        ANN.ReadModel(forexFilename.substring(0, 14)+"MACD&ANN.model");
         //classifiy unlabeled arff
-        ANN.Classify("arff_files/"+unlabeled+"_unlabeledMACDRecommendation.arff");
+        ANN.Classify("arff_files/"+forexFilename+"_unlabeledMACDRecommendation.arff");
         
     }
     /**
