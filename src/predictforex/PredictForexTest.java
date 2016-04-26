@@ -87,6 +87,7 @@ public class PredictForexTest {
 //        tesANN.normalizedForexPriceToArff(forexPairData);
 //        tesANN.rawForexPriceToArff(forexPairData);
         ForexFileWriter.rawForexPriceToArff(forexPairData);
+        ForexFileWriter.normalizedForexPriceToArff(forexPairData);
         
         
 //        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));

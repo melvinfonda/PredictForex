@@ -20,9 +20,11 @@ public class MACD {
     private String[][] MACDLine = new String[ForexFileReader.row][3]; 
     private String[][] SignalLine = new String[ForexFileReader.row][3]; 
     private String[][] Histogram = new String[ForexFileReader.row][3];
-    public static String[][] Recommendation = new String[ForexFileReader.row][8];
+    public static String[][] Recommendation = new String[ForexFileReader.row][11];
     String polarity="neutral";
     int OHLCcounter=-9999; //counter for locating the open high low and close value for the current time and date
+    private int EMA12Counter=-9999;
+    private int EMA26Counter=-9999;
     
     public double SMA (double totalPrice, int periods){    
         return (totalPrice) / (periods);  
@@ -177,11 +179,46 @@ public class MACD {
              for(int i=0;rawForexPrice[i][0]!=null&&OHLCcounter==-9999;i++){
                     if(Histogram[0][0].equals(rawForexPrice[i][0]) && Histogram[0][1].equals(rawForexPrice[i][1]) )
                     {
-                        OHLCcounter = i+1;
+                        OHLCcounter = i;
                     }
              }
              
-             j=0;
+             for(int i=0;EMA12[i][0]!=null&&EMA12Counter==-9999;i++){
+                    if(Histogram[0][0].equals(EMA12[i][0]) && Histogram[0][1].equals(EMA12[i][1]) )
+                    {
+                        EMA12Counter = i;
+                    }
+             }
+             
+             for(int i=0;EMA26[i][0]!=null&&EMA26Counter==-9999;i++){
+                    if(Histogram[0][0].equals(EMA26[i][0]) && Histogram[0][1].equals(EMA26[i][1]) )
+                    {
+                        EMA26Counter = i;
+                    }
+             }
+             
+             //first recmmoendation will be stall
+             //copy date
+            Recommendation[0][0] = Histogram[0][0]; 
+            //copy time
+            Recommendation[0][1] = Histogram[0][1]; 
+            Recommendation[0][2] = Histogram[0][2];
+            Recommendation[0][3] = "stall";
+            //copy open
+            Recommendation[0][4] = rawForexPrice[OHLCcounter][2]; 
+            //copy high
+            Recommendation[0][5] = rawForexPrice[OHLCcounter][3]; 
+            //copy low
+            Recommendation[0][6] = rawForexPrice[OHLCcounter][4]; 
+            //copy close
+            Recommendation[0][7] = rawForexPrice[OHLCcounter][5];
+            //copy EMA12
+            Recommendation[0][8] = EMA12[EMA12Counter][2];
+            //copy EMA26
+            Recommendation[0][9] = EMA26[EMA26Counter][2];
+            //copy Signal Line
+            Recommendation[0][10] = SignalLine[0][2];    
+             j=1;
              for (int i=1 ; Histogram[i][0]!=null ; i++)
              {
                 //copy date
@@ -205,18 +242,25 @@ public class MACD {
                 }
                 
                 //copy open
-                Recommendation[j][4] = rawForexPrice[OHLCcounter][2]; 
+                Recommendation[j][4] = rawForexPrice[OHLCcounter+1][2]; 
                 //copy high
-                Recommendation[j][5] = rawForexPrice[OHLCcounter][3]; 
+                Recommendation[j][5] = rawForexPrice[OHLCcounter+1][3]; 
                 //copy low
-                Recommendation[j][6] = rawForexPrice[OHLCcounter][4]; 
+                Recommendation[j][6] = rawForexPrice[OHLCcounter+1][4]; 
                 //copy close
-                Recommendation[j][7] = rawForexPrice[OHLCcounter][5];
-                    
+                Recommendation[j][7] = rawForexPrice[OHLCcounter+1][5];
+                //copy EMA12
+                Recommendation[j][8] = EMA12[EMA12Counter+1][2];
+                //copy EMA26
+                Recommendation[j][9] = EMA26[EMA26Counter+1][2];
+                //copy Signal Line
+                Recommendation[j][10] = SignalLine[i][2];    
                 OHLCcounter++;
+                EMA12Counter++;
+                EMA26Counter++;
                 j++;
              }
-//             ForexFileReader.printMatrix(Recommendation);
+             //ForexFileReader.printMatrix(Recommendation);
              ForexFileWriter.MACDPriceToCSV(Recommendation);
              ForexFileWriter.MACDToArff(Recommendation);
              //ForexFileWriter.NormalizedMACDToArff(Recommendation);
