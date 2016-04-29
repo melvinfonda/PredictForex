@@ -27,7 +27,6 @@ public class ForexFileReader {
         String line;
         String cvsSplitBy = ",";
         i=0;
-        
         //read from csv file then put in to matrix
         try {
                 br = new BufferedReader(new FileReader(csvFile));
@@ -63,17 +62,55 @@ public class ForexFileReader {
         //to take price per hour time
         for (int i = 0; i < rawRow; i++) {
             for (int j = 0; j < column; j++) {
-                if(rawForexData[i][j]!=null&&rawForexData[i][1].endsWith(":02"))
+                if(rawForexData[i][j]!=null&&rawForexData[i][1].endsWith(":00"))
                 {
                     forexData[x][j] = rawForexData[i][j];
                 }
             }
-            if(rawForexData[i][j]!=null&&rawForexData[i][1].endsWith(":02"))
+            if(rawForexData[i][j]!=null&&rawForexData[i][1].endsWith(":00"))
                 x++;
         }
         
         
         return forexData;
+    }
+    
+    public String[][] loadCSVtoArray(String csvFile,int col) {
+        String[][] array = new String[rawRow][col];
+        BufferedReader br = null;
+        String line;
+        String cvsSplitBy = ",";
+        i=0;
+        //read from csv file then put in to matrix
+        try {
+                br = new BufferedReader(new FileReader(csvFile));
+                
+                while (((line = br.readLine()) != null) && (!",,,,,,".equals(line))) {
+                    // use comma as separator
+                    String[] value = line.split(cvsSplitBy);
+                    for (int y=0;y<col;y++)
+                    {
+                        array[i][y] = value[y];
+                    }
+                    i++;
+                }
+        } 
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } 
+        catch (IOException e) {
+            e.printStackTrace();
+        } 
+        finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return array;
     }
     
     public static void printRawData(String[][] matrix)

@@ -15,7 +15,7 @@ import java.io.PrintWriter;
  * @author Melvin
  */
 public class ForexFileWriter {
-    static double trainingSet = 0.6; //percentage for training set         
+    static double trainingSet = 0.8; //percentage for training set         
     
     
     public static String [] findMinMax (String[][] ForexPrice, int column)
@@ -63,7 +63,7 @@ public class ForexFileWriter {
         return normalizedForexPrice;
     }
     
-    public static String[][] MACDPriceNormalization (String[][] MACDPrice,String [] MACDMinMax,String[]openMinMax,String[]highMinMax,String[]lowMinMax,String[]closeMinMax,String[]EMA12,String[]EMA26,String[]EMA9)
+    public static String[][] MACDPriceNormalization (String[][] MACDPrice,String [] MACDMinMax,String[]openMinMax,String[]highMinMax,String[]lowMinMax,String[]closeMinMax,String[]EMA12MinMax,String[]EMA26MinMax,String[]EMA9MinMax)
     {
         String [][]normalizedMACDPrice = new String [MACDPrice.length][MACDPrice[0].length];
         
@@ -76,9 +76,9 @@ public class ForexFileWriter {
                 normalizedMACDPrice[i][5] = FeatureScaling(MACDPrice [i][5], highMinMax);
                 normalizedMACDPrice[i][6] = FeatureScaling(MACDPrice [i][6], lowMinMax);
                 normalizedMACDPrice[i][7] = FeatureScaling(MACDPrice [i][7], closeMinMax);
-                normalizedMACDPrice[i][8] = FeatureScaling(MACDPrice [i][8], closeMinMax);
-                normalizedMACDPrice[i][9] = FeatureScaling(MACDPrice [i][9], closeMinMax);
-                normalizedMACDPrice[i][10] = FeatureScaling(MACDPrice [i][10], closeMinMax);
+                normalizedMACDPrice[i][8] = FeatureScaling(MACDPrice [i][8], EMA12MinMax);
+                normalizedMACDPrice[i][9] = FeatureScaling(MACDPrice [i][9], EMA26MinMax);
+                normalizedMACDPrice[i][10] = FeatureScaling(MACDPrice [i][10], EMA9MinMax);
         }
         
         return normalizedMACDPrice;
@@ -382,7 +382,7 @@ public class ForexFileWriter {
         pw.println("@ATTRIBUTE EMA9 real");
         pw.println("@ATTRIBUTE histogram1 real");
         pw.println("@ATTRIBUTE histogram2 real");
-        pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
+        //pw.println("@ATTRIBUTE recommendation {buy,sell,stall}");
         pw.println("");
         pw.println("@data");
         
@@ -398,11 +398,10 @@ public class ForexFileWriter {
         pw2.println("@ATTRIBUTE EMA9 real");
         pw2.println("@ATTRIBUTE histogram1 real");
         pw2.println("@ATTRIBUTE histogram2 real");
-        pw2.println("@ATTRIBUTE recommendation {buy,sell,stall}");
+        //pw2.println("@ATTRIBUTE recommendation {buy,sell,stall}");
         pw2.println("");
         pw2.println("@data");
        
-        
         //count for row to divide between training set and test set
         for(int i=0;MACDPrice[i][0]!=null;i++){
             counter++;
@@ -431,13 +430,13 @@ public class ForexFileWriter {
         normalizedMACDPrice = MACDPriceNormalization(MACDTrainingSet,findMinMax(MACDTrainingSet, 2),findMinMax(MACDTrainingSet, 4),findMinMax(MACDTrainingSet, 5),findMinMax(MACDTrainingSet, 6),findMinMax(MACDTrainingSet, 7),findMinMax(MACDTrainingSet, 8),findMinMax(MACDTrainingSet, 9),findMinMax(MACDTrainingSet, 10));
         for(int i=1;(i<=counter*trainingSet);i++)
         {
-            pw.println("\""+normalizedMACDPrice[i-1][0]+" "+normalizedMACDPrice[i-1][1]+"\","+normalizedMACDPrice[i-1][4]+","+normalizedMACDPrice[i-1][5]+","+normalizedMACDPrice[i-1][6]+","+normalizedMACDPrice[i-1][7]+","+normalizedMACDPrice[i-1][8]+","+normalizedMACDPrice[i-1][9]+","+normalizedMACDPrice[i-1][10]+","+normalizedMACDPrice[i-1][2]+","+normalizedMACDPrice[i][2]+","+normalizedMACDPrice[i][3]);
+            pw.println("\""+normalizedMACDPrice[i-1][0]+" "+normalizedMACDPrice[i-1][1]+"\","+normalizedMACDPrice[i-1][4]+","+normalizedMACDPrice[i-1][5]+","+normalizedMACDPrice[i-1][6]+","+normalizedMACDPrice[i-1][7]+","+normalizedMACDPrice[i-1][8]+","+normalizedMACDPrice[i-1][9]+","+normalizedMACDPrice[i-1][10]+","+normalizedMACDPrice[i-1][2]+","+normalizedMACDPrice[i][2]);
         }
         
         normalizedMACDPriceTestSet = MACDPriceNormalization(MACDTestSet,findMinMax(MACDTrainingSet, 2),findMinMax(MACDTrainingSet, 4),findMinMax(MACDTrainingSet, 5),findMinMax(MACDTrainingSet, 6),findMinMax(MACDTrainingSet, 7),findMinMax(MACDTrainingSet, 8),findMinMax(MACDTrainingSet, 9),findMinMax(MACDTrainingSet, 10));
         for(int i=1;(i<t);i++)
         {
-            pw2.println("\""+normalizedMACDPrice[i-1][0]+" "+normalizedMACDPrice[i-1][1]+"\","+normalizedMACDPriceTestSet[i-1][4]+","+normalizedMACDPriceTestSet[i-1][5]+","+normalizedMACDPriceTestSet[i-1][6]+","+normalizedMACDPriceTestSet[i-1][7]+","+normalizedMACDPriceTestSet[i-1][8]+","+normalizedMACDPriceTestSet[i-1][9]+","+normalizedMACDPriceTestSet[i-1][10]+","+normalizedMACDPriceTestSet[i-1][2]+","+normalizedMACDPriceTestSet[i][2]+","+normalizedMACDPriceTestSet[i][3]);
+            pw2.println("\""+normalizedMACDPriceTestSet[i-1][0]+" "+normalizedMACDPriceTestSet[i-1][1]+"\","+normalizedMACDPriceTestSet[i-1][4]+","+normalizedMACDPriceTestSet[i-1][5]+","+normalizedMACDPriceTestSet[i-1][6]+","+normalizedMACDPriceTestSet[i-1][7]+","+normalizedMACDPriceTestSet[i-1][8]+","+normalizedMACDPriceTestSet[i-1][9]+","+normalizedMACDPriceTestSet[i-1][10]+","+normalizedMACDPriceTestSet[i-1][2]+","+normalizedMACDPriceTestSet[i][2]);
         }
         
         //Flush the output to the file

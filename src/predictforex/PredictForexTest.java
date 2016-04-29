@@ -8,8 +8,10 @@ package predictforex;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import static predictforex.ANN.TenFoldTrain_aNN;
 import weka.classifiers.functions.MultilayerPerceptron;
 
@@ -19,6 +21,7 @@ import weka.classifiers.functions.MultilayerPerceptron;
  */
 public class PredictForexTest {
     private static String[][] forexPairData;
+    private static String[][] labeledForex;
     public static String filename="";
     public static String unlabeledFilename="";
         /**
@@ -67,27 +70,84 @@ public class PredictForexTest {
         
     }
     
-    public static void main(String[] args) throws FileNotFoundException, IOException, Exception {
-        ForexPredictor forexPredictor = new ForexPredictor();
-        
-        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-        filename = bufferRead.readLine();
-        
-        /*TES BACA CSV*/
+    public void forexSignal() throws IOException
+    {
         ForexFileReader forexFile = new ForexFileReader();
-        forexPairData = forexFile.loadForexPrice(filename+".csv");
-        //tes.printRawData(forexPairData);
+        labeledForex = forexFile.loadCSVtoArray("csv_files/labeled_DAT_MT_EURUSD_M1_201603.csv",6);
+        String [][]forexWithSignal = new String[labeledForex.length][3];
+        int j;
         
-        forexPredictor.useMACD(forexPairData);
-        //forexPredictor.useANN(forexPairData,filename);
-        //forexPredictor.useMACDandANN(forexPairData,filename);
-        
-//        /*TES ForexFileWriter */
-        ForexFileWriter tesANN = new ForexFileWriter();
-//        tesANN.normalizedForexPriceToArff(forexPairData);
-//        tesANN.rawForexPriceToArff(forexPairData);
-        ForexFileWriter.rawForexPriceToArff(forexPairData);
-        ForexFileWriter.normalizedForexPriceToArff(forexPairData);
+        j=0;
+        for (int i=2 ; labeledForex[i][0]!=null ; i++)
+        {
+           // number
+           forexWithSignal[j][0] = Integer.toString(i-1); 
+           //copy date time
+           forexWithSignal[j][1] = labeledForex[i][0]; 
+
+           //calculate point where to sell or buy using close2 value
+           if(Double.parseDouble(labeledForex[i-1][5])>Double.parseDouble(labeledForex[i][5])){
+                   forexWithSignal[j][2] = "buy";
+           }
+           else if(Double.parseDouble(labeledForex[i-1][5])<Double.parseDouble(labeledForex[i][5])){
+                   forexWithSignal[j][2] = "sell";
+           }
+           else
+           {
+               forexWithSignal[j][2] = "stall";
+           }
+           j++;
+        }
+        ForexFileReader.printMatrix(forexWithSignal);
+//        
+//        FileWriter fw = new FileWriter("csv_files/labeledWithSignal.csv");
+//        PrintWriter pw = new PrintWriter(fw);
+//        
+//        for(int x=0;forexWithSignal[x][0]!=null;x++){
+//            for(int y=0;y<3;j++){ 
+//                pw.print(forexWithSignal[x][y]);
+//                if(y!=forexWithSignal[0].length-1)
+//                    pw.print(",");
+//                else
+//                {
+//                
+//                }
+//            }
+//            if(forexWithSignal[x+1][0]!=null)
+//                pw.println("");
+//        }        
+//        
+//        //Flush the output to the file
+//        pw.flush();
+//
+//        //Close the Print Writer
+//        pw.close();
+//
+//        //Close the File Writer
+//        fw.close();
+    }
+    
+    public static void main(String[] args) throws FileNotFoundException, IOException, Exception {
+        PredictForexTest forexPredictor = new PredictForexTest();
+        forexPredictor.forexSignal();
+//        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+//        filename = bufferRead.readLine();
+//        
+//        /*TES BACA CSV*/
+//        ForexFileReader forexFile = new ForexFileReader();
+//        forexPairData = forexFile.loadForexPrice(filename+".csv");
+//        //tes.printRawData(forexPairData);
+//        
+//        forexPredictor.useMACD(forexPairData);
+//        //forexPredictor.useANN(forexPairData,filename);
+//        //forexPredictor.useMACDandANN(forexPairData,filename);
+//        
+////        /*TES ForexFileWriter */
+//        ForexFileWriter tesANN = new ForexFileWriter();
+////        tesANN.normalizedForexPriceToArff(forexPairData);
+////        tesANN.rawForexPriceToArff(forexPairData);
+//        ForexFileWriter.rawForexPriceToArff(forexPairData);
+//        ForexFileWriter.normalizedForexPriceToArff(forexPairData);
         
         
 //        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));

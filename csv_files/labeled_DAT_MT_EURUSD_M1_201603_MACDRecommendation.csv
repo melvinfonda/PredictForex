@@ -1,17 +1,4 @@
-@relation DAT_MT_EURUSD_M1_201603_MACDRecommendation
-
-@attribute timestamp date 'yyyy.MM.dd HH:mm'
-@attribute open numeric
-@attribute high numeric
-@attribute low numeric
-@attribute close numeric
-@attribute EMA12 numeric
-@attribute EMA26 numeric
-@attribute EMA9 numeric
-@attribute histogram1 numeric
-@attribute histogram2 numeric
-
-@data
+timestamp,open,high,low,close,EMA12,EMA26,EMA9,histogram1,histogram2
 '2016.03.02 09:00',1.08432,1.08453,1.08428,1.08446,1.085724,1.086204,-0.000345,-0.000135,-0.000158
 '2016.03.02 10:00',1.08389,1.08409,1.08385,1.08399,1.085457,1.08604,-0.000392,-0.00019,-0.00021
 '2016.03.02 11:00',1.08271,1.08289,1.08271,1.08277,1.085044,1.085798,-0.000465,-0.000289,-0.000333
