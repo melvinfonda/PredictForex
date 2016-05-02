@@ -41,7 +41,7 @@ public class T1Data extends JPanel {
         CSVFile Rd = new CSVFile();
         MyModel NewModel = new MyModel();
         this.table.setModel(NewModel);
-        File DataFile = new File("csv_files/DAT_MT_EURUSD_M1_201603_MACDPrice.csv");
+        File DataFile = new File("csv_files/labeledWithSignalDAT_MT_EURUSD_M1_201603_MACDRecommendation.csv");
         ArrayList<String[]> Rs2 = Rd.ReadCSVfile(DataFile);
         NewModel.AddCSVData(Rs2);
         System.out.println("Rows: " + NewModel.getRowCount());
@@ -84,7 +84,7 @@ public class T1Data extends JPanel {
     }
 
     class MyModel extends AbstractTableModel {
-        private final String[] columnNames = { "1", "2", "3", "4", "5", "6", "7", "8" };
+        private final String[] columnNames = { "NO.", "DATETIME", "SIGNAL"};
         private ArrayList<String[]> Data = new ArrayList<String[]>();
 
         public void AddCSVData(ArrayList<String[]> DataIn) {

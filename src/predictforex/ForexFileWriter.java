@@ -15,7 +15,7 @@ import java.io.PrintWriter;
  * @author Melvin
  */
 public class ForexFileWriter {
-    static double trainingSet = 0.8; //percentage for training set         
+    static double trainingSet = 0.6; //percentage for training set         
     
     
     public static String [] findMinMax (String[][] ForexPrice, int column)
@@ -240,6 +240,56 @@ public class ForexFileWriter {
                     pw.print(",");
             }
             if(MACDPrice[i+1][0]!=null)
+                pw.println("");
+        }        
+        
+        //Flush the output to the file
+        pw.flush();
+
+        //Close the Print Writer
+        pw.close();
+
+        //Close the File Writer
+        fw.close();
+    }
+    
+    public static void forexSignalToCSV(String[][] forexSignal) throws IOException
+    {
+        FileWriter fw = new FileWriter("csv_files/labeledWithSignal"+ForexPredictor.filename+".csv");
+        PrintWriter pw = new PrintWriter(fw);
+        
+        for(int i=0;forexSignal[i][0]!=null;i++){
+            for(int j=0;j<forexSignal[0].length;j++){ 
+                pw.print(forexSignal[i][j]);
+                if(j!=forexSignal[0].length-1)
+                    pw.print(",");
+            }
+            if(forexSignal[i+1][0]!=null)
+                pw.println("");
+        }        
+        
+        //Flush the output to the file
+        pw.flush();
+
+        //Close the Print Writer
+        pw.close();
+
+        //Close the File Writer
+        fw.close();
+    }
+    
+    public static void MACDSignalToCSV(String[][] forexSignal) throws IOException
+    {
+        FileWriter fw = new FileWriter("csv_files/labeledWithSignal"+ForexPredictor.filename+"_MACDRecommendation.csv");
+        PrintWriter pw = new PrintWriter(fw);
+        
+        for(int i=0;forexSignal[i][0]!=null;i++){
+            for(int j=0;j<forexSignal[0].length;j++){ 
+                pw.print(forexSignal[i][j]);
+                if(j!=forexSignal[0].length-1)
+                    pw.print(",");
+            }
+            if(forexSignal[i+1][0]!=null)
                 pw.println("");
         }        
         

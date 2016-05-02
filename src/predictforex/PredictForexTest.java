@@ -138,8 +138,8 @@ public class PredictForexTest {
 //        forexPairData = forexFile.loadForexPrice(filename+".csv");
 //        //tes.printRawData(forexPairData);
 //        
-//        forexPredictor.useMACD(forexPairData);
-//        //forexPredictor.useANN(forexPairData,filename);
+//        //forexPredictor.useMACD(forexPairData);
+//       // forexPredictor.useANN(forexPairData,filename);
 //        //forexPredictor.useMACDandANN(forexPairData,filename);
 //        
 ////        /*TES ForexFileWriter */
@@ -147,8 +147,9 @@ public class PredictForexTest {
 ////        tesANN.normalizedForexPriceToArff(forexPairData);
 ////        tesANN.rawForexPriceToArff(forexPairData);
 //        ForexFileWriter.rawForexPriceToArff(forexPairData);
-//        ForexFileWriter.normalizedForexPriceToArff(forexPairData);
-        
+//        
+//        MACD tesMACD = new MACD();
+//        tesMACD.MACDAnalysis(forexPairData);
         
 //        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
 //        unlabeledFilename = bufferRead.readLine();

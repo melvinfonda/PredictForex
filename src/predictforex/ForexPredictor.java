@@ -6,6 +6,7 @@
 
 package predictforex;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -25,10 +26,10 @@ import weka.core.converters.CSVSaver;
 public class ForexPredictor extends javax.swing.JFrame {
     File file;
     private static String[][] forexPairData;
-    private static String[][] labeledForex = new String[ForexFileReader.row][5]; //labeled predicted forexproce in matrix
-    private static String[][]forexWithSignal = new String[ForexFileReader.row][3]; // labeled forexprice with signal 
-    private static String[][] labeledMACD = new String[ForexFileReader.row][5]; //labeled predicted MACD in matrix
-    private static String[][]MACDWithSignal = new String[ForexFileReader.row][3]; //labeled MACD in matrix
+    public static String[][] labeledForex = new String[ForexFileReader.row][5]; //labeled predicted forexproce in matrix
+    public static String[][] forexWithSignal = new String[ForexFileReader.row][3]; // labeled forexprice with signal 
+    public static String[][] labeledMACD = new String[ForexFileReader.row][5]; //labeled predicted MACD in matrix
+    public static String[][] MACDWithSignal = new String[ForexFileReader.row][3]; //labeled MACD in matrix
     public static String filename="";
     public static String unlabeledFilename="";
     private String option;
@@ -73,10 +74,10 @@ public class ForexPredictor extends javax.swing.JFrame {
            forexWithSignal[j][1] = labeledForex[i][0]; 
 
            //calculate point where to sell or buy using close2 value
-           if(Double.parseDouble(labeledForex[i-1][5])>Double.parseDouble(labeledForex[i][5])){
+           if(Double.parseDouble(labeledForex[i-1][5])<Double.parseDouble(labeledForex[i][5])){
                    forexWithSignal[j][2] = "buy";
            }
-           else if(Double.parseDouble(labeledForex[i-1][5])<Double.parseDouble(labeledForex[i][5])){
+           else if(Double.parseDouble(labeledForex[i-1][5])>Double.parseDouble(labeledForex[i][5])){
                    forexWithSignal[j][2] = "sell";
            }
            else
@@ -86,6 +87,7 @@ public class ForexPredictor extends javax.swing.JFrame {
            j++;
         }
         ForexFileReader.printMatrix(forexWithSignal);
+        ForexFileWriter.forexSignalToCSV(forexWithSignal);
     }
     
     public void MACDSignal() throws IOException
@@ -97,27 +99,30 @@ public class ForexPredictor extends javax.swing.JFrame {
         j=0;
         for (int i=2 ; labeledMACD[i][0]!=null ; i++)
         {
-           // number
-           MACDWithSignal[j][0] = Integer.toString(i-1); 
-           //copy date time
-           MACDWithSignal[j][1] = labeledMACD[i][0]; 
-
            //calculate point where to sell or buy using histogram
                 if(Double.parseDouble(labeledMACD[i-1][9])>0){
-                    MACDWithSignal[j][2] = "stall";
                     if(Double.parseDouble(labeledMACD[i][9])<0){
+                        // number
+                        MACDWithSignal[j][0] = Integer.toString(j+1); 
+                        //copy date time
+                        MACDWithSignal[j][1] = labeledMACD[i][0]; 
                         MACDWithSignal[j][2] = "sell";
+                        j++;
                     }
                 }
                 else if(Double.parseDouble(labeledMACD[i-1][9])<0){
-                    MACDWithSignal[j][2] = "stall";
                     if(Double.parseDouble(labeledMACD[i][9])>0){
+                        // number
+                        MACDWithSignal[j][0] = Integer.toString(j+1); 
+                        //copy date time
+                        MACDWithSignal[j][1] = labeledMACD[i][0]; 
                         MACDWithSignal[j][2] = "buy";
+                        j++;
                     }
                 }
-           j++;
         }
         ForexFileReader.printMatrix(MACDWithSignal);
+        ForexFileWriter.MACDSignalToCSV(MACDWithSignal);
     }
     
     public void useMACD(String[][] forexPairData) throws IOException
@@ -135,7 +140,7 @@ public class ForexPredictor extends javax.swing.JFrame {
         ANN.ReadDataset("arff_files/"+unlabeledFilename+".arff");
         //read the model which going to be used
         //ANN.ReadModel(unlabeledFilename.substring(0, 14)+"ANN.model");
-        ANN.ReadModel(unlabeledFilename.substring(0, 14)+"normalizedANN.model");
+        ANN.ReadModel("model/"+unlabeledFilename.substring(0, 14)+"ANN.model");
 //        ANN.ReadModel(unlabeledFilename.substring(0, 14)+"normalizedclassANN.model");
         //classifiy unlabeled arff
         ANN.Classify("arff_files/"+unlabeledFilename+".arff");
@@ -157,7 +162,7 @@ public class ForexPredictor extends javax.swing.JFrame {
         ANN.ReadDataset("arff_files/"+forexFilename+"_unlabeledMACDRecommendation.arff");
         //read the model which going to be used
 //        ANN.ReadModel(forexFilename.substring(0, 14)+"MACD&ANN.model");
-        ANN.ReadModel(forexFilename.substring(0, 14)+"normalizedMACD&ANN.model");
+        ANN.ReadModel("model/"+forexFilename.substring(0, 14)+"MACD&ANN.model");
         //classifiy unlabeled arff
         ANN.Classify("arff_files/"+forexFilename+"_unlabeledMACDRecommendation.arff");
         
@@ -346,7 +351,7 @@ public class ForexPredictor extends javax.swing.JFrame {
         } 
         
             ForexFileReader forexFile = new ForexFileReader();
-            forexPairData = forexFile.loadForexPrice(filename+".csv");
+                forexPairData = forexFile.loadForexPrice(filename+".csv");
         
     }//GEN-LAST:event_csvUploader
 
@@ -378,6 +383,7 @@ public class ForexPredictor extends javax.swing.JFrame {
                 forexPredictor.forexSignal();
             }
             catch(Exception IOException){
+                IOException.printStackTrace();
             }
         }
         else if("MACD&ANN".equals(option)){
@@ -387,10 +393,13 @@ public class ForexPredictor extends javax.swing.JFrame {
                 forexPredictor.MACDSignal();
             }
             catch(Exception IOException){
+                System.err.println("An IOException was caught!");
+
             }
         }
         
         //new ResultsUI().setVisible(true);
+        //new T1Data().setVisible(true);
         //this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
