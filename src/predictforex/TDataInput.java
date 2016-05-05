@@ -51,8 +51,8 @@ public class TDataInput extends JPanel {
         ArrayList<String[]> Rs2 = Rd.ReadCSVfile(DataFile);
         NewModel.AddCSVData(Rs2);
         
-        System.out.println("Rows: " + NewModel.getRowCount());
-        System.out.println("Cols: " + NewModel.getColumnCount());
+//        System.out.println("Rows: " + NewModel.getRowCount());
+//        System.out.println("Cols: " + NewModel.getColumnCount());
     }
 
     // Method for reading CSV file
@@ -67,7 +67,7 @@ public class TDataInput extends JPanel {
                     String st = brd.readLine();
                     OneRow = st.split(",");
                     Rs.add(OneRow);
-                    System.out.println(Arrays.toString(OneRow));
+//                    System.out.println(Arrays.toString(OneRow));
                 } // end of while
             } // end of try
             catch (Exception e) {

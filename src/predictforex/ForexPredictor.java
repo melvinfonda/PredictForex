@@ -130,7 +130,7 @@ public class ForexPredictor extends javax.swing.JFrame {
            }
            j++;
         }
-        ForexFileReader.printMatrix(forexWithSignal);
+        //ForexFileReader.printMatrix(forexWithSignal);
         ForexFileWriter.forexSignalToCSV(forexWithSignal);
     }
     
@@ -166,7 +166,7 @@ public class ForexPredictor extends javax.swing.JFrame {
                     }
                 }
         }
-        ForexFileReader.printMatrix(MACDWithSignal);
+        //ForexFileReader.printMatrix(MACDWithSignal);
         ForexFileWriter.MACDSignalToCSV(MACDWithSignal);
     }
     

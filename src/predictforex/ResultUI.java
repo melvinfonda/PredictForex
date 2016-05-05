@@ -1,7 +1,5 @@
 package predictforex;
 
-import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.axis.*;
 import com.opencsv.CSVReader;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -20,7 +18,10 @@ import javax.swing.table.TableModel;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.*;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
@@ -164,7 +165,27 @@ public void createChart() throws IOException{
                 true, // legend
                 true, // tooltips
                 false); // urls
-
+        
+        if(ForexPredictor.option.equalsIgnoreCase("ANN")){
+        final XYPlot plot = chart.getXYPlot();
+        NumberAxis range = (NumberAxis)plot.getRangeAxis();  
+            if(ForexPredictor.filename.equals("DAT_MT_GBPUSD_M1_201603")){
+            range.setRange(1.35, 1.48);
+            range.setTickUnit(new NumberTickUnit(0.01));
+            }
+            else if(ForexPredictor.filename.equals("DAT_MT_EURUSD_M1_201603")){
+            range.setRange(1.07, 1.15);
+            range.setTickUnit(new NumberTickUnit(0.01));
+            }
+            else if(ForexPredictor.filename.equals("DAT_MT_USDCHF_M1_201603")){
+            range.setRange(0.95, 1.01);
+            range.setTickUnit(new NumberTickUnit(0.01));
+            }
+            else if(ForexPredictor.filename.equals("DAT_MT_USDJPY_M1_201603")){
+            range.setRange(110, 117);
+            range.setTickUnit(new NumberTickUnit(1));
+            }
+        }
         return chart;
     }
 
