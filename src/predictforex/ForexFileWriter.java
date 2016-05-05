@@ -228,6 +228,31 @@ public class ForexFileWriter {
         fw2.close();
     }
     
+    public static void ForexPriceToCSV(String[][] forexPrice) throws IOException
+    {
+        FileWriter fw = new FileWriter("csv_files/"+ForexPredictor.filename+".csv");
+        PrintWriter pw = new PrintWriter(fw);
+        
+        for(int i=0;forexPrice[i][0]!=null;i++){
+            for(int j=0;j<forexPrice[0].length;j++){ 
+                pw.print(forexPrice[i][j]);
+                if(j!=forexPrice[0].length-1)
+                    pw.print(",");
+            }
+            if(forexPrice[i+1][0]!=null)
+                pw.println("");
+        }        
+        
+        //Flush the output to the file
+        pw.flush();
+
+        //Close the Print Writer
+        pw.close();
+
+        //Close the File Writer
+        fw.close();
+    }
+    
     public static void MACDPriceToCSV(String[][] MACDPrice) throws IOException
     {
         FileWriter fw = new FileWriter("csv_files/"+ForexPredictor.filename+"_MACDPrice.csv");
@@ -278,18 +303,18 @@ public class ForexFileWriter {
         fw.close();
     }
     
-    public static void MACDSignalToCSV(String[][] forexSignal) throws IOException
+    public static void MACDSignalToCSV(String[][] MACDSignal) throws IOException
     {
         FileWriter fw = new FileWriter("csv_files/labeledWithSignal"+ForexPredictor.filename+"_MACDRecommendation.csv");
         PrintWriter pw = new PrintWriter(fw);
         
-        for(int i=0;forexSignal[i][0]!=null;i++){
-            for(int j=0;j<forexSignal[0].length;j++){ 
-                pw.print(forexSignal[i][j]);
-                if(j!=forexSignal[0].length-1)
+        for(int i=0;MACDSignal[i][0]!=null;i++){
+            for(int j=0;j<MACDSignal[0].length;j++){ 
+                pw.print(MACDSignal[i][j]);
+                if(j!=MACDSignal[0].length-1)
                     pw.print(",");
             }
-            if(forexSignal[i+1][0]!=null)
+            if(MACDSignal[i+1][0]!=null)
                 pw.println("");
         }        
         

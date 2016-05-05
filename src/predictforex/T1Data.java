@@ -7,6 +7,7 @@
 package predictforex;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.io.BufferedReader;
@@ -21,6 +22,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
+import org.jfree.ui.RefineryUtilities;
 
 public class T1Data extends JPanel {
     private final JTable table;
@@ -28,8 +30,14 @@ public class T1Data extends JPanel {
     public T1Data() {
         super(new BorderLayout(3, 3));
         this.table = new JTable(new MyModel());
-        this.table.setPreferredScrollableViewportSize(new Dimension(700, 70));
+        this.table.setPreferredScrollableViewportSize(new Dimension(330, 400));
+//        this.table.getColumnModel().getColumn(0).setPreferredWidth(10);
+//        this.table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         this.table.setFillsViewportHeight(true);
+        this.table.setBackground(Color.lightGray);
+//        this.table.setForeground(Color.white);
+        
+        
         JPanel ButtonOpen = new JPanel(new FlowLayout(FlowLayout.CENTER));
         add(ButtonOpen, BorderLayout.SOUTH);
         // Create the scroll pane and add the table to it.
@@ -41,9 +49,10 @@ public class T1Data extends JPanel {
         CSVFile Rd = new CSVFile();
         MyModel NewModel = new MyModel();
         this.table.setModel(NewModel);
-        File DataFile = new File("csv_files/labeledWithSignalDAT_MT_EURUSD_M1_201603_MACDRecommendation.csv");
+        File DataFile = new File("csv_files/labeledWithSignal"+ForexPredictor.unlabeledFilename+".csv");
         ArrayList<String[]> Rs2 = Rd.ReadCSVfile(DataFile);
         NewModel.AddCSVData(Rs2);
+        
         System.out.println("Rows: " + NewModel.getRowCount());
         System.out.println("Cols: " + NewModel.getColumnCount());
     }
@@ -58,7 +67,7 @@ public class T1Data extends JPanel {
                 BufferedReader brd = new BufferedReader(new FileReader(DataFile));
                 while (brd.ready()) {
                     String st = brd.readLine();
-                    OneRow = st.split(",|\\s|;");
+                    OneRow = st.split(",");
                     Rs.add(OneRow);
                     System.out.println(Arrays.toString(OneRow));
                 } // end of while
@@ -84,7 +93,7 @@ public class T1Data extends JPanel {
     }
 
     class MyModel extends AbstractTableModel {
-        private final String[] columnNames = { "NO.", "DATETIME", "SIGNAL"};
+        private final String[] columnNames = { "No.", "Datetime", "Signal"};
         private ArrayList<String[]> Data = new ArrayList<String[]>();
 
         public void AddCSVData(ArrayList<String[]> DataIn) {
@@ -114,6 +123,8 @@ public class T1Data extends JPanel {
     }
 
     public static void main(String[] args) {
+        
+        
         // Schedule a job for the event-dispatching thread:
         // creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {

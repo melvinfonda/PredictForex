@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import org.jfree.ui.RefineryUtilities;
 import weka.core.Instances;
 import weka.core.converters.ArffLoader;
 import weka.core.converters.CSVSaver;
@@ -45,7 +46,7 @@ public class ForexPredictor extends javax.swing.JFrame {
         if("ANN".equals(option))
             loader.setSource(new File("arff_files/labeled_"+filename+".arff"));
         else
-            loader.setSource(new File("arff_files/labeled_"+filename+"_MACDRecommendation.arff"));    
+            loader.setSource(new File("arff_files/labeled_"+filename+"_MACDANNRecommendation.arff"));    
         Instances data = loader.getDataSet();
         
         //save CSV
@@ -55,7 +56,7 @@ public class ForexPredictor extends javax.swing.JFrame {
         if("ANN".equals(option))
             saver.setFile(new File("csv_files/labeled_"+filename+".csv"));
         else
-            saver.setFile(new File("csv_files/labeled_"+filename+"_MACDRecommendation.csv"));
+            saver.setFile(new File("csv_files/labeled_"+filename+"_MACDANNRecommendation.csv"));
         saver.writeBatch();
     }
     
@@ -93,7 +94,7 @@ public class ForexPredictor extends javax.swing.JFrame {
     public void MACDSignal() throws IOException
     {
         ForexFileReader forexFile = new ForexFileReader();
-        labeledMACD = forexFile.loadCSVtoArray("csv_files/labeled_"+filename+"_MACDRecommendation.csv",10);
+        labeledMACD = forexFile.loadCSVtoArray("csv_files/labeled_"+filename+"_MACDANNRecommendation.csv",10);
         int j;
         
         j=0;
@@ -127,6 +128,7 @@ public class ForexPredictor extends javax.swing.JFrame {
     
     public void useMACD(String[][] forexPairData) throws IOException
     {
+        
         MACD MACDIndicator = new MACD();
         MACDIndicator.MACDAnalysis(forexPairData);   
     }
@@ -137,13 +139,13 @@ public class ForexPredictor extends javax.swing.JFrame {
         ForexFileWriter.unlabeledForexPriceToArff(forexPairData);
         /*ANN*/
         //read initial dataset
-        ANN.ReadDataset("arff_files/"+unlabeledFilename+".arff");
+        ANN.ReadDataset("arff_files/"+forexFilename+".arff");
         //read the model which going to be used
         //ANN.ReadModel(unlabeledFilename.substring(0, 14)+"ANN.model");
-        ANN.ReadModel("model/"+unlabeledFilename.substring(0, 14)+"ANN.model");
+        ANN.ReadModel("model/"+forexFilename.substring(0, 14)+"ANN.model");
 //        ANN.ReadModel(unlabeledFilename.substring(0, 14)+"normalizedclassANN.model");
         //classifiy unlabeled arff
-        ANN.Classify("arff_files/"+unlabeledFilename+".arff");
+        ANN.Classify("arff_files/"+forexFilename+".arff");
     }
     
     public void useMACDandANN(String[][] forexPairData, String forexFilename) throws IOException, Exception
@@ -157,14 +159,14 @@ public class ForexPredictor extends javax.swing.JFrame {
         //write to arff
         ForexFileWriter.unlabeledMACDToArff(MACDIndicator.Recommendation);
         
-        unlabeledFilename = forexFilename+"_MACDRecommendation";
+        unlabeledFilename = forexFilename+"_MACDANNRecommendation";
         //read initial dataset
-        ANN.ReadDataset("arff_files/"+forexFilename+"_unlabeledMACDRecommendation.arff");
+        ANN.ReadDataset("arff_files/"+forexFilename+"_unlabeledMACDANNRecommendation.arff");
         //read the model which going to be used
 //        ANN.ReadModel(forexFilename.substring(0, 14)+"MACD&ANN.model");
         ANN.ReadModel("model/"+forexFilename.substring(0, 14)+"MACD&ANN.model");
         //classifiy unlabeled arff
-        ANN.Classify("arff_files/"+forexFilename+"_unlabeledMACDRecommendation.arff");
+        ANN.Classify("arff_files/"+forexFilename+"_unlabeledMACDANNRecommendation.arff");
         
     }
     /**
@@ -352,7 +354,11 @@ public class ForexPredictor extends javax.swing.JFrame {
         
             ForexFileReader forexFile = new ForexFileReader();
                 forexPairData = forexFile.loadForexPrice(filename+".csv");
-        
+                try {
+                    ForexFileWriter.ForexPriceToCSV(forexPairData);
+                }
+                catch(Exception IOException){
+                }
     }//GEN-LAST:event_csvUploader
 
     private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
@@ -398,9 +404,15 @@ public class ForexPredictor extends javax.swing.JFrame {
             }
         }
         
-        //new ResultsUI().setVisible(true);
-        //new T1Data().setVisible(true);
-        //this.dispose();
+        try {
+            //new ResultsUI().setVisible(true);
+            //new T1Data().setVisible(true);
+            ResultUI resultpage = new ResultUI("Results");
+            resultpage.pack();
+            RefineryUtilities.centerFrameOnScreen(resultpage);
+            resultpage.setVisible(true);
+        } catch (IOException ex){};
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
