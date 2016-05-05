@@ -305,7 +305,7 @@ public class ForexFileWriter {
     
     public static void MACDSignalToCSV(String[][] MACDSignal) throws IOException
     {
-        FileWriter fw = new FileWriter("csv_files/labeledWithSignal"+ForexPredictor.filename+"_MACDRecommendation.csv");
+        FileWriter fw = new FileWriter("csv_files/labeledWithSignal"+ForexPredictor.filename+"_MACDANNRecommendation.csv");
         PrintWriter pw = new PrintWriter(fw);
         
         for(int i=0;MACDSignal[i][0]!=null;i++){
@@ -329,13 +329,13 @@ public class ForexFileWriter {
     }
     
     public static void MACDToArff (String[][] MACDPrice) throws IOException{
-        FileWriter fw = new FileWriter("arff_files/"+ForexPredictor.filename+"_MACDRecommendation.arff");
+        FileWriter fw = new FileWriter("arff_files/"+ForexPredictor.filename+"_MACDANNRecommendation.arff");
         PrintWriter pw = new PrintWriter(fw);
-        FileWriter fw2 = new FileWriter("arff_files/"+ForexPredictor.filename+"_MACDRecommendationTestSet.arff");
+        FileWriter fw2 = new FileWriter("arff_files/"+ForexPredictor.filename+"_MACDANNRecommendationTestSet.arff");
         PrintWriter pw2 = new PrintWriter(fw2);
         int counter=0;
         
-        pw.println("@RELATION "+ ForexPredictor.filename+"_MACDRecommendation");
+        pw.println("@RELATION "+ ForexPredictor.filename+"_MACDANNRecommendation");
         pw.println("");
         pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE open real");
@@ -351,7 +351,7 @@ public class ForexFileWriter {
         pw.println("");
         pw.println("@data");
         
-        pw2.println("@RELATION  "+ ForexPredictor.filename+"_MACDRecommendationTestSet");
+        pw2.println("@RELATION  "+ ForexPredictor.filename+"_MACDANNRecommendationTestSet");
         pw2.println("");
         pw2.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw2.println("@ATTRIBUTE open real");
@@ -396,12 +396,58 @@ public class ForexFileWriter {
         fw2.close();
     }
     
+    public static void MACDRecommendationToCSV (String[][] MACDPrice) throws IOException{
+        FileWriter fw = new FileWriter("csv_files/labeledWithSignal"+ForexPredictor.filename+"_MACDRecommendation.csv");
+        PrintWriter pw = new PrintWriter(fw);
+        
+        //write price to csv
+        int j=1;
+        for(int i=0;MACDPrice[i][0]!=null;i++)
+        {
+            if("buy".equals(MACDPrice[i][3])||"sell".equals(MACDPrice[i][3])){
+                pw.println(Integer.toString(j)+","+MACDPrice[i][0]+" "+MACDPrice[i][1]+","+MACDPrice[i][3]);
+                j++;
+            }
+        }
+        
+        //Flush the output to the file
+        pw.flush();
+
+        //Close the Print Writer
+        pw.close();
+
+        //Close the File Writer
+        fw.close();
+    }
+    
+    public static void MACDRecommendationToGraph (String[][] MACDPrice) throws IOException{
+        FileWriter fw = new FileWriter("csv_files/Graph_"+ForexPredictor.filename+"_MACDRecommendation.csv");
+        PrintWriter pw = new PrintWriter(fw);
+        
+        //write price to csv
+        for(int i=0;MACDPrice[i][0]!=null;i++)
+        {
+                pw.println(Integer.toString(i+1)+","+MACDPrice[i][10]+","+(Double.valueOf(MACDPrice[i][8])-Double.valueOf(MACDPrice[i][9])));            
+        }
+        
+        //Flush the output to the file
+        pw.flush();
+
+        //Close the Print Writer
+        pw.close();
+
+        //Close the File Writer
+        fw.close();
+    }
+    
+    
+    
     public static void unlabeledMACDToArff (String[][] MACDPrice) throws IOException{
-        FileWriter fw = new FileWriter("arff_files/"+ForexPredictor.filename+"_unlabeledMACDRecommendation.arff");
+        FileWriter fw = new FileWriter("arff_files/"+ForexPredictor.filename+"_unlabeledMACDANNRecommendation.arff");
         PrintWriter pw = new PrintWriter(fw);
         int counter=0;
         
-        pw.println("@RELATION "+ ForexPredictor.filename+"_MACDRecommendation");
+        pw.println("@RELATION "+ ForexPredictor.filename+"_MACDANNRecommendation");
         pw.println("");
         pw.println("@ATTRIBUTE timestamp DATE \"yyyy.MM.dd HH:mm\"");
         pw.println("@ATTRIBUTE open real");

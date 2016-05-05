@@ -33,7 +33,7 @@ public class ForexPredictor extends javax.swing.JFrame {
     public static String[][] MACDWithSignal = new String[ForexFileReader.row][3]; //labeled MACD in matrix
     public static String filename="";
     public static String unlabeledFilename="";
-    private String option;
+    public static String option;
         /**
      * @param args the command line arguments
      * @throws java.io.FileNotFoundException
@@ -60,10 +60,53 @@ public class ForexPredictor extends javax.swing.JFrame {
         saver.writeBatch();
     }
     
+    public static void ANNRecommendationToGraph (String[][] ANNPrice) throws IOException{
+        FileWriter fw = new FileWriter("csv_files/Graph_"+ForexPredictor.filename+".csv");
+        PrintWriter pw = new PrintWriter(fw);
+        
+        //write price to csv
+        for(int i=2;ANNPrice[i][0]!=null;i++)
+        {
+                pw.println(Integer.toString(i-1)+","+ANNPrice[i][4]+","+ANNPrice[i-1][5]);
+        }
+        
+        //Flush the output to the file
+        pw.flush();
+
+        //Close the Print Writer
+        pw.close();
+
+        //Close the File Writer
+        fw.close();
+    }
+    
+    public static void MACDANNRecommendationToGraph (String[][] MACDPrice) throws IOException{
+        FileWriter fw = new FileWriter("csv_files/Graph_"+ForexPredictor.filename+"_MACDANNRecommendation.csv");
+        PrintWriter pw = new PrintWriter(fw);
+        
+        //write price to csv
+         int j=1;
+        //write price to csv
+        for(int i=2;MACDPrice[i][0]!=null;i++)
+        {
+                pw.println(Integer.toString(i-1)+","+MACDPrice[i][8]+","+MACDPrice[i-1][9]);
+        }
+        
+        //Flush the output to the file
+        pw.flush();
+
+        //Close the Print Writer
+        pw.close();
+
+        //Close the File Writer
+        fw.close();
+    }
+    
     public void forexSignal() throws IOException
     {
         ForexFileReader forexFile = new ForexFileReader();
         labeledForex = forexFile.loadCSVtoArray("csv_files/labeled_"+filename+".csv",6);
+        ForexPredictor.ANNRecommendationToGraph(labeledForex);
         int j;
         
         j=0;
@@ -95,6 +138,7 @@ public class ForexPredictor extends javax.swing.JFrame {
     {
         ForexFileReader forexFile = new ForexFileReader();
         labeledMACD = forexFile.loadCSVtoArray("csv_files/labeled_"+filename+"_MACDANNRecommendation.csv",10);
+        ForexPredictor.MACDANNRecommendationToGraph(labeledMACD);
         int j;
         
         j=0;
@@ -128,9 +172,9 @@ public class ForexPredictor extends javax.swing.JFrame {
     
     public void useMACD(String[][] forexPairData) throws IOException
     {
-        
         MACD MACDIndicator = new MACD();
-        MACDIndicator.MACDAnalysis(forexPairData);   
+        MACDIndicator.MACDAnalysis(forexPairData); 
+        unlabeledFilename=filename+"_MACDRecommendation";
     }
     
     public void useANN(String[][] forexPairData, String forexFilename) throws IOException, Exception

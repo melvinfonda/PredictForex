@@ -1,5 +1,7 @@
 package predictforex;
 
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.axis.*;
 import com.opencsv.CSVReader;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -41,7 +43,7 @@ private     JPanel      tableInputPanel;
     JFreeChart chart;
     ChartPanel chartPanel;
     final int chartWidth = 560;
-    final int chartHeight = 367;
+    final int chartHeight = 867;
     CSVReader reader;
     String[] readNextLine;
     XYSeries series;
@@ -69,6 +71,7 @@ private     JPanel      tableInputPanel;
     topPanel.setLayout( new BorderLayout() );
     getContentPane().add( topPanel );  
     this.add(topPanel);
+    
     // Create a splitter pane
     splitPaneV = new JSplitPane( JSplitPane.VERTICAL_SPLIT );
     topPanel.add( splitPaneV, BorderLayout.CENTER );
@@ -101,6 +104,7 @@ public void createChart() throws IOException{
     //add chart
     dataset = createDataset();
     chart = createChart(dataset);
+    
     chartPanel = new ChartPanel(chart);
     chartPanel.setPreferredSize(new java.awt.Dimension(chartHeight,
             chartWidth));
@@ -111,13 +115,22 @@ public void createChart() throws IOException{
             IOException {
         dataset = new XYSeriesCollection();
         try {
-            reader = new CSVReader(new FileReader("csv_files/b.csv"),',');
+            reader = new CSVReader(new FileReader("csv_files/Graph_"+ForexPredictor.unlabeledFilename+".csv"),',');
             // Read the header and chuck it away
             //readNextLine = reader.readNext();
-
+            final XYSeries seriesX;  
+            final XYSeries seriesY;  
+          
             // Set up series
-            final XYSeries seriesX = new XYSeries("Actual");
-            final XYSeries seriesY = new XYSeries("Predicted");
+            if("ANN".equals(ForexPredictor.option)||"MACD&ANN".equals(ForexPredictor.option)){
+                seriesX = new XYSeries("Actual");
+                seriesY = new XYSeries("Predicted");
+            }
+            else
+            {
+                seriesX = new XYSeries("Signal Line");
+                seriesY = new XYSeries("MACD Line");
+            }
 //            final XYSeries seriesZ = new XYSeries("Z");
 
             while ((readNextLine = reader.readNext()) != null) {
@@ -142,9 +155,9 @@ public void createChart() throws IOException{
 
     public JFreeChart createChart(XYDataset dataset)
             throws NumberFormatException, IOException {
-        chart = ChartFactory.createXYLineChart("Analysis Chart", // chart
+        chart = ChartFactory.createXYLineChart(ForexPredictor.filename + " Analysis Chart", // chart
                                                                         // title
-                "Time", // domain axis label
+                "Time (Hour)", // domain axis label
                 "Price", // range axis label
                 dataset, // data
                 PlotOrientation.VERTICAL, // the plot orientation
@@ -156,8 +169,8 @@ public void createChart() throws IOException{
     }
 
     public static void main(String[] args) throws IOException {
-        final ResultUI demo = new ResultUI("Results");
-        demo.pack();
+        final ResultUI demo = new ResultUI("PredictForex");
+//        demo.pack();
         RefineryUtilities.centerFrameOnScreen(demo);
         demo.setVisible(true);
     }

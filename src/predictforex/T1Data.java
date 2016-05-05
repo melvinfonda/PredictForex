@@ -8,6 +8,7 @@ package predictforex;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.io.BufferedReader;
@@ -15,13 +16,13 @@ import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellRenderer;
 import org.jfree.ui.RefineryUtilities;
 
 public class T1Data extends JPanel {
@@ -29,13 +30,25 @@ public class T1Data extends JPanel {
 
     public T1Data() {
         super(new BorderLayout(3, 3));
-        this.table = new JTable(new MyModel());
+        this.table = new JTable(new MyModel()){
+    public Component prepareRenderer(TableCellRenderer renderer, int Index_row, int Index_col) {
+        // get the current row
+        Component comp = super.prepareRenderer(renderer, Index_row, Index_col);
+        // even index, not selected
+        if ("buy".equalsIgnoreCase((String) table.getModel().getValueAt(Index_row, 2)) ) {
+            comp.setForeground(Color.green);
+        } else if ("sell".equalsIgnoreCase((String) table.getModel().getValueAt(Index_row, 2))){
+            comp.setForeground(Color.red);
+        }
+        return comp;
+    }
+};
         this.table.setPreferredScrollableViewportSize(new Dimension(330, 400));
-//        this.table.getColumnModel().getColumn(0).setPreferredWidth(10);
-//        this.table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
+        this.table.getColumnModel().getColumn(0).setPreferredWidth(10);
+        this.table.setAutoResizeMode(JTable.AUTO_RESIZE_LAST_COLUMN);
         this.table.setFillsViewportHeight(true);
-        this.table.setBackground(Color.lightGray);
-//        this.table.setForeground(Color.white);
+        this.table.setBackground(Color.black);
+//        this.table.setForeground(Color.DARK_GRAY);
         
         
         JPanel ButtonOpen = new JPanel(new FlowLayout(FlowLayout.CENTER));
@@ -88,7 +101,7 @@ public class T1Data extends JPanel {
         T1Data newContentPane = new T1Data();
         frame.setContentPane(newContentPane);
         // Display the window.
-        frame.pack();
+//        frame.pack();
         frame.setVisible(true);
     }
 
