@@ -11,6 +11,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import org.jfree.chart.ChartFactory;
@@ -55,7 +57,7 @@ public class ResultUI extends ApplicationFrame {
     JFreeChart chart;
     
     ChartPanel chartPanel;
-    final int chartWidth = 560;
+    final int chartWidth = 460;
     final int chartHeight = 867;
     CSVReader reader;
     String[] readNextLine;
@@ -142,17 +144,18 @@ public class ResultUI extends ApplicationFrame {
     }  
 
 public void createTable(){
+    TitledBorder title = BorderFactory.createTitledBorder("Recommendation Table");
     tablePanel = new JPanel();
     tablePanel.setLayout( new BorderLayout() );
-
+    tablePanel.setBorder(title);
     tablePanel.add( new RecommTable() );
 }
 
 public void createInputPanel() throws IOException{
-
+    TitledBorder title = BorderFactory.createTitledBorder("Input Table");
     tableInputPanel = new JPanel();
     tableInputPanel.setLayout(new java.awt.BorderLayout());
-    
+    tableInputPanel.setBorder(title);
     tableInputPanel.add( new InputTable());
 }
 public void createChart() throws IOException{

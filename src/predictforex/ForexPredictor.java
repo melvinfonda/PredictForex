@@ -34,6 +34,7 @@ public class ForexPredictor extends javax.swing.JFrame {
     public static String filename="";
     public static String unlabeledFilename="";
     public static String option;
+    private boolean fileUploaded=false;
         /**
      * @param args the command line arguments
      * @throws java.io.FileNotFoundException
@@ -297,6 +298,7 @@ public class ForexPredictor extends javax.swing.JFrame {
 
         jButton1.setFont(new java.awt.Font("Rockwell", 1, 14)); // NOI18N
         jButton1.setText("Analyze");
+        jButton1.setToolTipText("upload csv files before analyze");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -311,6 +313,7 @@ public class ForexPredictor extends javax.swing.JFrame {
         });
 
         jButton2.setText("Browse");
+        jButton2.setToolTipText("upload csv files here");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 csvUploader(evt);
@@ -426,6 +429,7 @@ public class ForexPredictor extends javax.swing.JFrame {
         int returnVal = jfc.showOpenDialog(jLabel1);
 
         if (returnVal == JFileChooser.APPROVE_OPTION) {
+            fileUploaded =true;
             file = jfc.getSelectedFile();
             //jTextField1.setText(file.toString());
             jTextField1.setText(jfc.getSelectedFile().getName());
@@ -484,15 +488,17 @@ public class ForexPredictor extends javax.swing.JFrame {
             }
         }
         
-        try {
-            //new ResultsUI().setVisible(true);
-            //new T1Data().setVisible(true);
-            ResultUI resultpage = new ResultUI("Results");
-            resultpage.pack();
-            RefineryUtilities.centerFrameOnScreen(resultpage);
-            resultpage.setVisible(true);
-        } catch (IOException ex){};
-        this.dispose();
+        if(fileUploaded){
+            try {
+                //new ResultsUI().setVisible(true);
+                //new T1Data().setVisible(true);
+                ResultUI resultpage = new ResultUI("Results");
+                resultpage.pack();
+                RefineryUtilities.centerFrameOnScreen(resultpage);
+                resultpage.setVisible(true);
+            } catch (IOException ex){};
+            this.dispose();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed

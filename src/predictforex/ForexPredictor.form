@@ -227,6 +227,7 @@
               <Font name="Rockwell" size="14" style="1"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Analyze"/>
+            <Property name="toolTipText" type="java.lang.String" value="upload csv files before analyze"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
@@ -243,6 +244,7 @@
         <Component class="javax.swing.JButton" name="jButton2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Browse"/>
+            <Property name="toolTipText" type="java.lang.String" value="upload csv files here"/>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="csvUploader"/>
