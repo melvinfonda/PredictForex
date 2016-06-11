@@ -424,6 +424,7 @@ public class ForexPredictor extends javax.swing.JFrame {
         jfc = new JFileChooser();  
         FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV Files", "csv");
         File f = new File(System.getProperty("user.dir"));
+        jfc.setAcceptAllFileFilterUsed(false);
         jfc.setFileFilter(filter);
         jfc.setCurrentDirectory(f);
         int returnVal = jfc.showOpenDialog(jLabel1);
